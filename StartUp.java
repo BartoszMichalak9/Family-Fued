@@ -52,7 +52,7 @@ public class StartUp extends JFrame implements ActionListener
    {
       if(ae.getActionCommand().equals("Start"));
       {
-      
+         new MainGUI();
       }
    }   
 }  
