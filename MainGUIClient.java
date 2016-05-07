@@ -39,6 +39,7 @@ public class MainGUIClient
       JFrame frame = new JFrame();
       frame.setSize(800, 800);
       frame.setTitle("Family Feud");
+      frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       frame.setLocationRelativeTo(null);
       
       northPanel = new JPanel(new GridLayout(2, 1));
