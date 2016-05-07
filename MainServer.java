@@ -149,7 +149,7 @@ public class MainServer
             
             while(true)
             {
-              if(playerCount==1){
+              if(playerCount==4){
                   outputMessage = "Question: "+ makeQuestion();
               }
               outputMessage = brRun.readLine();
