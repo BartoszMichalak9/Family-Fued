@@ -139,7 +139,7 @@ public class MainServer
                   }This will be for limiting the player count*/
                  playerName[playerCount] = outputMessage.substring(12);
                  System.out.println("Name entered: "+playerName[playerCount]);
-                 System.out.println("Player: "+playerName[playerCount]+ "connected.");
+                 System.out.println("Player: "+playerName[playerCount]+ " connected.");
 
                 }
             }
