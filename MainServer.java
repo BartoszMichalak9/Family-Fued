@@ -103,20 +103,23 @@ public class MainServer
          s = _s;
       }
       
-      public int makeQuestion(){
+      public String makeQuestion(){
       //this makes it from 1 to 25, not inlcuding zero
          boolean check = false;
-         int index = generate.nextInt(25)+1; 
+         int index = generate.nextInt(25)+1;
+         String output = "";
          while(!check){
          if(!numsCalled.contains(index)){
             numsCalled.add(index);
             check = true;
-            return index;
+            output = questionsList.get(index);
          }
-         else
+         else{
             index = generate.nextInt(25)+1; 
+            
+         }
       }
-      return -1;
+      return "error";
       }
 
       public void run()
@@ -146,6 +149,9 @@ public class MainServer
             
             while(true)
             {
+              if(playerCount==1){
+                  outputMessage = "Question: "+ makeQuestion();
+              }
               outputMessage = brRun.readLine();
               
                for(PrintWriter p: printers)
