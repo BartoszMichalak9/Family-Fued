@@ -138,7 +138,6 @@ public class MainGUIClient
             br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
             new Reader().start();
-            System.out.println(playerName);
             pw.println(playerName);
             pw.flush();                 
          }
@@ -189,15 +188,16 @@ public class MainGUIClient
                while(true)
                {
                   msg = br.readLine();
+
                   if(msg.contains("Question: "))
                   {
                      header.setText(msg);
+                     header.setFont(new Font("Arial", Font.BOLD, 18));
                   }
                   else
                   {
                      System.out.println(msg);
                   }
-                  //messageArea.append(msg + "\n");
                }
             }
             catch(IOException ioe)

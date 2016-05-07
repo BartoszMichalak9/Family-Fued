@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 public class StartUp extends JFrame implements ActionListener
 {
+   private JFrame frame;
    private JButton start = null;
    private JPanel panel = null;
    private JPanel panelTwo = null;
@@ -19,7 +20,7 @@ public class StartUp extends JFrame implements ActionListener
    
    public StartUp()
    {
-      JFrame frame = new JFrame();
+      frame = new JFrame();
       frame.setSize(588, 400);
       frame.setTitle("Family Feud");
       frame.setLocationRelativeTo(null);
@@ -53,6 +54,7 @@ public class StartUp extends JFrame implements ActionListener
       if(ae.getActionCommand().equals("Start"));
       {
          new PlayerChoice();
+         frame.setVisible(false);
       }
    }   
 }  

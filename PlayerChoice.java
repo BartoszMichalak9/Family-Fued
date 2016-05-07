@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 public class PlayerChoice extends JFrame implements ActionListener
 {
+   private JFrame frame;
    private JLabel playerOneLabel = null;
    private JTextField playerOneText = null;
    private JButton ok = null;
@@ -21,7 +22,7 @@ public class PlayerChoice extends JFrame implements ActionListener
      
    public PlayerChoice()
    {
-      JFrame frame = new JFrame();
+      frame = new JFrame();
       frame.setTitle("Family Feud");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setSize(600, 200);
@@ -51,6 +52,7 @@ public class PlayerChoice extends JFrame implements ActionListener
       {
          playerOneEntered = playerOneText.getText();
          new MainGUIClient("Player Name:"+playerOneEntered);
+         frame.setVisible(false);
       }
    }   
 }

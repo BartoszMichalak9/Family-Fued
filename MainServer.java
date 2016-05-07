@@ -7,14 +7,9 @@ import java.io.*;
 import java.net.*;
 
 public class MainServer
-{
-   private FileReader fr = null;
-   private BufferedReader br = null;
-   private FileReader frTwo = null;
-   private BufferedReader brTwo = null;   
+{   
    private ArrayList<String> questionsList = new ArrayList<String>();
    private ArrayList<String> answersList = new ArrayList<String>();
-   private String line;
    private Vector<PrintWriter> printers = new Vector<PrintWriter>();
    private int[] playerScore = new  int[4];
    private String[] playerName = new String[4];
@@ -36,33 +31,93 @@ public class MainServer
       }
       catch(IOException ioe)
       {
-      }      
-
-      try
+      }                   
+   }
+   
+   class MainServerInner extends Thread
+   {
+      Socket s;
+      String outputMessage = "";     
+      HashSet<Integer> numsCalled = new HashSet<Integer>();
+      Random generate = new Random();
+            
+      public MainServerInner(Socket _s)
       {
-         fr = new FileReader("FAMILY FEUD QUESTIONS.csv");
-         br = new BufferedReader(fr);
-      }
-      catch(FileNotFoundException fnfe)
-      {
+         s = _s;
       }
       
-      try
+      public String makeQuestion(){
+      //this makes it from 1 to 25, not inlcuding zero
+         boolean check = false;
+         int index = generate.nextInt(25);
+         String output = "";
+         while(!check){
+         if(!numsCalled.contains(index)){
+            numsCalled.add(index);
+            check = true;
+            output = questionsList.get(index);
+            return output;
+         }
+         else{
+            index = generate.nextInt(25); 
+            
+         }
+      }
+      return "error";
+      }
+
+      public void run()
       {
-         line = br.readLine();
+         BufferedReader brRun = null;
+         PrintWriter pwRun = null;          
          
-         while(!line.equals(null))
+         try
+         {        
+            brRun = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            pwRun = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
+            printers.add(pwRun);
+            addAnswers();
+            addQuestions();
+            
+            while(true)
+            {
+               while(playerCount<3){
+                  outputMessage = brRun.readLine();
+                  if(outputMessage.contains("Player Name:")){
+                    playerCount++;
+                    System.out.println(playerCount);
+                    /* if(playerCount<4){
+                     playerCount++;
+                     }This will be for limiting the player count*/
+                    playerName[playerCount] = outputMessage.substring(12);
+                    System.out.println("Name entered: "+playerName[playerCount]);
+                    System.out.println("Player: "+playerName[playerCount]+ " connected.");
+   
+                   }
+               }
+                             
+              if(playerCount==3){
+                  outputMessage = "Question: "+ makeQuestion();
+              }
+               for(PrintWriter p: printers)
+               {                  
+                  p.println(outputMessage);
+                  p.flush();
+                  System.out.println(outputMessage);
+               }
+            }
+         }
+         catch(IOException ioe)
          {
-            questionsList.add(line);
-            line = br.readLine();
-         } 
+         }
       }
-      catch(IOException ioe)
-      {
-      }
-      catch(NullPointerException npe)
-      {
-      }
+   }   
+   
+   public void addAnswers()
+   {
+      FileReader frTwo = null;
+      BufferedReader brTwo = null;      
+      String line;
       
       try
       {
@@ -88,87 +143,41 @@ public class MainServer
       } 
       catch(NullPointerException npe)
       {
-      }             
+      }   
    }
    
-   class MainServerInner extends Thread
+   public void addQuestions()
    {
-      Socket s;
-      String outputMessage = "";     
-      HashSet<Integer> numsCalled = new HashSet<Integer>();
-      Random generate = new Random();
-            
-      public MainServerInner(Socket _s)
+      FileReader fr = null;
+      BufferedReader br = null;      
+      String line;
+      
+      try
       {
-         s = _s;
+         fr = new FileReader("FAMILY FEUD QUESTIONS.csv");
+         br = new BufferedReader(fr);
+      }
+      catch(FileNotFoundException fnfe)
+      {
       }
       
-      public String makeQuestion(){
-      //this makes it from 1 to 25, not inlcuding zero
-         boolean check = false;
-         int index = generate.nextInt(25)+1;
-         String output = "";
-         while(!check){
-         if(!numsCalled.contains(index)){
-            numsCalled.add(index);
-            check = true;
-            output = questionsList.get(index);
-         }
-         else{
-            index = generate.nextInt(25)+1; 
-            
-         }
-      }
-      return "error";
-      }
-
-      public void run()
+      try
       {
-         BufferedReader brRun = null;
-         PrintWriter pwRun = null;          
-         
-         try
-         {        
-            brRun = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            pwRun = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
-            printers.add(pwRun);
-            
-            while(playerCount<4){
-               outputMessage = brRun.readLine();
-               if(outputMessage.contains("Player Name:")){
-                 playerCount++;
-                 /* if(playerCount<4){
-                  playerCount++;
-                  }This will be for limiting the player count*/
-                 playerName[playerCount] = outputMessage.substring(12);
-                 System.out.println("Name entered: "+playerName[playerCount]);
-                 System.out.println("Player: "+playerName[playerCount]+ " connected.");
-
-                }
-            }
-            
-            while(true)
-            {
-              if(playerCount==4){
-                  outputMessage = "Question: "+ makeQuestion();
-              }
-              outputMessage = brRun.readLine();
-              
-               for(PrintWriter p: printers)
-               {                  
-                  p.println(outputMessage);
-                  p.flush();
-               }
-            }
-         }
-         catch(IOException ioe)
+         line = br.readLine();
+         while(!line.equals(null))
          {
-         }
+            questionsList.add(line);
+            line = br.readLine();
+         } 
       }
-   }   
-   
-   
-   
+      catch(IOException ioe)
+      {
+      }
+      catch(NullPointerException npe)
+      {
+      }
+   }
+
    public static void main(String [] args)
    {
       MainServer mainServer = new MainServer();
