@@ -14,6 +14,7 @@ public class MainServer
    private int[] playerScore = new  int[4];
    private String[] playerName = new String[4];
    private int playerCount = -1;
+   private int readyCount = 0;
    public MainServer()
    {
       ServerSocket ss;
@@ -29,8 +30,7 @@ public class MainServer
             th.start();
          }         
       }
-      catch(IOException ioe)
-      {
+      catch(IOException ioe){
       }                   
    }
    
@@ -41,13 +41,11 @@ public class MainServer
       HashSet<Integer> numsCalled = new HashSet<Integer>();
       Random generate = new Random();
             
-      public MainServerInner(Socket _s)
-      {
+      public MainServerInner(Socket _s){
          s = _s;
       }
       
       public String makeQuestion(){
-      //this makes it from 1 to 25, not inlcuding zero
          boolean check = false;
          int index = generate.nextInt(25);
          String output = "";
@@ -59,11 +57,19 @@ public class MainServer
             return output;
          }
          else{
-            index = generate.nextInt(25); 
-            
+            index = generate.nextInt(25);             
          }
       }
       return "error";
+      }
+      
+      public void broadcast(String msg){
+         for(PrintWriter p: printers)
+               {                  
+                  p.println(msg);
+                  p.flush();
+                  System.out.println("Message Sent:  "+msg);
+               }
       }
 
       public void run()
@@ -81,68 +87,57 @@ public class MainServer
             
             while(true)
             {
-               while(playerCount<3){
+               if(playerCount<3){
                   outputMessage = brRun.readLine();
                   if(outputMessage.contains("Player Name:")){
-                    playerCount++;
-                    System.out.println(playerCount);
-                    /* if(playerCount<4){
-                     playerCount++;
-                     }This will be for limiting the player count*/
-                    playerName[playerCount] = outputMessage.substring(12);
-                    System.out.println("Name entered: "+playerName[playerCount]);
-                    System.out.println("Player: "+playerName[playerCount]+ " connected.");
+                        playerCount++;
+                        System.out.println(playerCount);
+                        /* if(playerCount<4){
+                           playerCount++;
+                           }This will be for limiting the player count*/
+                        playerName[playerCount] = outputMessage.substring(12);
+                        System.out.println("Name entered: "+playerName[playerCount]);
+                        System.out.println("Player: "+playerName[playerCount]+ " connected.");
    
-                   }
-               }
+                   }                   
+               }               
                              
               if(playerCount==3){
+                  
                   outputMessage = "Question: "+ makeQuestion();
+                  broadcast(outputMessage);
+                  playerCount = 0;               
               }
-               for(PrintWriter p: printers)
-               {                  
-                  p.println(outputMessage);
-                  p.flush();
-                  System.out.println(outputMessage);
-               }
+              broadcast(outputMessage);
             }
          }
-         catch(IOException ioe)
-         {
+         catch(IOException ioe){
          }
       }
    }   
    
-   public void addAnswers()
-   {
+   public void addAnswers(){
       FileReader frTwo = null;
       BufferedReader brTwo = null;      
-      String line;
-      
-      try
-      {
+      String line;      
+      try{
          frTwo = new FileReader("FAMILY FEUD ANSWERS.csv");
          brTwo = new BufferedReader(frTwo);
       }
-      catch(FileNotFoundException fnfe)
-      {
+      catch(FileNotFoundException fnfe){
       }
       
-      try
-      {
+      try{
          line = brTwo.readLine();         
          
-         while(!line.equals(null))
-         {
+         while(!line.equals(null)){
             answersList.add(line);        
             line = brTwo.readLine();
          }
       }
-      catch(IOException ioe)
-      {
+      catch(IOException ioe){
       } 
-      catch(NullPointerException npe)
-      {
+      catch(NullPointerException npe){
       }   
    }
    

@@ -53,7 +53,7 @@ public class MainGUIClient
       panelOneNorth.add(serverLabel);
       ipAddress = new JTextField(10);
       panelOneNorth.add(ipAddress);
-      connect = new JButton("Connect");      
+      connect = new JButton("Ready");      
       panelOneNorth.add(connect);
       northPanel.add(panelOneNorth);
       
