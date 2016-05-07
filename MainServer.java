@@ -95,10 +95,28 @@ public class MainServer
    {
       Socket s;
       String outputMessage = "";     
-
+      HashSet<Integer> numsCalled = new HashSet<Integer>();
+      Random generate = new Random();
+            
       public MainServerInner(Socket _s)
       {
          s = _s;
+      }
+      
+      public int makeQuestion(){
+      //this makes it from 1 to 25, not inlcuding zero
+         boolean check = false;
+         int index = generate.nextInt(25)+1; 
+         while(!check){
+         if(!numsCalled.contains(index)){
+            numsCalled.add(index);
+            check = true;
+            return index;
+         }
+         else
+            index = generate.nextInt(25)+1; 
+      }
+      return -1;
       }
 
       public void run()
@@ -112,9 +130,7 @@ public class MainServer
             pwRun = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
             printers.add(pwRun);
             
-            while(true)
-            {
-               
+            while(playerCount<4){
                outputMessage = brRun.readLine();
                if(outputMessage.contains("Player Name:")){
                  playerCount++;
@@ -123,10 +139,15 @@ public class MainServer
                   }This will be for limiting the player count*/
                  playerName[playerCount] = outputMessage.substring(12);
                  System.out.println("Name entered: "+playerName[playerCount]);
-                  
-               }
-               System.out.println(outputMessage);
-      
+                 System.out.println("Player: "+outputMessage+ "connected.");
+
+                }
+            }
+            
+            while(true)
+            {
+              outputMessage = brRun.readLine();
+              
                for(PrintWriter p: printers)
                {                  
                   p.println(outputMessage);
@@ -139,17 +160,6 @@ public class MainServer
          }
       }
    }   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
    
    
    
