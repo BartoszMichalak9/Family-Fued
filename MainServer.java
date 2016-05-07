@@ -16,7 +16,9 @@ public class MainServer
    private ArrayList<String> answersList = new ArrayList<String>();
    private String line;
    private Vector<PrintWriter> printers = new Vector<PrintWriter>();
-  
+   private int[] playerScore = new  int[4];
+   private String[] playerName = new String[4];
+   private int playerCount = -1;
    public MainServer()
    {
       ServerSocket ss;
@@ -36,9 +38,9 @@ public class MainServer
       {
       }      
 
-      /*try
+      try
       {
-         fr = new FileReader("FAMILY-FEUD-QUESTIONS-Sheet1.csv");
+         fr = new FileReader("FAMILY FEUD QUESTIONS.csv");
          br = new BufferedReader(fr);
       }
       catch(FileNotFoundException fnfe)
@@ -64,7 +66,7 @@ public class MainServer
       
       try
       {
-         frTwo = new FileReader("FAMILY-FEUD-ANSWERS-Sheet1-1.csv");
+         frTwo = new FileReader("FAMILY FEUD ANSWERS.csv");
          brTwo = new BufferedReader(frTwo);
       }
       catch(FileNotFoundException fnfe)
@@ -77,7 +79,7 @@ public class MainServer
          
          while(!line.equals(null))
          {
-            questionsList.add(line);        
+            answersList.add(line);        
             line = brTwo.readLine();
          }
       }
@@ -86,7 +88,7 @@ public class MainServer
       } 
       catch(NullPointerException npe)
       {
-      }*/             
+      }             
    }
    
    class MainServerInner extends Thread
@@ -112,8 +114,17 @@ public class MainServer
             
             while(true)
             {
+               
                outputMessage = brRun.readLine();
-
+               if(outputMessage.contains("Player Name:")){
+                 playerCount++;
+                 /* if(playerCount<4){
+                  playerCount++;
+                  }This will be for limiting the player count*/
+                 playerName[playerCount] = outputMessage.substring(11);
+                 System.out.println("Name entered: "+playerName[playerCount]);
+                  
+               }
                System.out.println(outputMessage);
       
                for(PrintWriter p: printers)
