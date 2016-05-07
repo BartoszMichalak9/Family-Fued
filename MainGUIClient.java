@@ -8,9 +8,12 @@ import java.io.*;
 
 public class MainGUIClient
 {
+   private static String aPlayer;
+   
    private JPanel panelOneNorth;
    private JLabel serverLabel;
    private JTextField ipAddress;
+   private JTextField playerName;
    private JButton connect;
    
    private JPanel panelTwoNorth;
@@ -34,8 +37,9 @@ public class MainGUIClient
    private JButton answerSeven;
    private JButton answerEight;
    
-   public MainGUIClient()
+   public MainGUIClient(String _aPlayer)
    {
+      aPlayer = _aPlayer;
       JFrame frame = new JFrame();
       frame.setSize(800, 800);
       frame.setTitle("Family Feud");
@@ -97,7 +101,7 @@ public class MainGUIClient
       southPanel.add(sendAnswer);
       frame.add(southPanel, BorderLayout.SOUTH);
       
-      SenderGUI sender = new SenderGUI(answer, ipAddress);
+      SenderGUI sender = new SenderGUI(answer, ipAddress, aPlayer);
       sendAnswer.addActionListener(sender);
       connect.addActionListener(sender);
       
@@ -106,7 +110,7 @@ public class MainGUIClient
 
    public static void main(String [] args)
    {
-      MainGUIClient mainClient = new MainGUIClient();
+      MainGUIClient mainClient = new MainGUIClient(aPlayer);
    }
 }
 
@@ -117,11 +121,13 @@ class SenderGUI implements ActionListener
    PrintWriter pw = null;   
    JTextField answer;
    JTextField theAddresses;
+   String playerName;
    
-   public SenderGUI(JTextField _answer, JTextField _theAddresses)
+   public SenderGUI(JTextField _answer, JTextField _theAddresses, String _playerName)
    {
       answer = _answer;
       theAddresses = _theAddresses;
+      playerName = _playerName;
    }
    
    public void connect()
@@ -132,7 +138,10 @@ class SenderGUI implements ActionListener
          s = new Socket(theAddresses.getText(), 16100);
          br = new BufferedReader(new InputStreamReader(s.getInputStream()));
          pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
-         new Reader().start();        
+         new Reader().start();
+         System.out.println(playerName);
+         pw.println(playerName);
+         pw.flush();                 
       }
       catch(UnknownHostException uhe)
       {

@@ -94,7 +94,7 @@ public class MainServer
    class MainServerInner extends Thread
    {
       Socket s;
-      String outputMessage;     
+      String outputMessage = "";     
 
       public MainServerInner(Socket _s)
       {
@@ -121,7 +121,7 @@ public class MainServer
                  /* if(playerCount<4){
                   playerCount++;
                   }This will be for limiting the player count*/
-                 playerName[playerCount] = outputMessage.substring(11);
+                 playerName[playerCount] = outputMessage.substring(12);
                  System.out.println("Name entered: "+playerName[playerCount]);
                   
                }
