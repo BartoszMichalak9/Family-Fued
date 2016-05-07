@@ -112,95 +112,102 @@ public class MainGUIClient
    {
       MainGUIClient mainClient = new MainGUIClient(aPlayer);
    }
-}
 
-class SenderGUI implements ActionListener
-{
-   Socket s;
-   BufferedReader br = null;
-   PrintWriter pw = null;   
-   JTextField answer;
-   JTextField theAddresses;
-   String playerName;
-   
-   public SenderGUI(JTextField _answer, JTextField _theAddresses, String _playerName)
+   class SenderGUI implements ActionListener
    {
-      answer = _answer;
-      theAddresses = _theAddresses;
-      playerName = _playerName;
-   }
-   
-   public void connect()
-   {
-      try
-      {
-         System.out.println(theAddresses.getText());
-         s = new Socket(theAddresses.getText(), 16100);
-         br = new BufferedReader(new InputStreamReader(s.getInputStream()));
-         pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
-         new Reader().start();
-         System.out.println(playerName);
-         pw.println(playerName);
-         pw.flush();                 
-      }
-      catch(UnknownHostException uhe)
-      {
-         System.err.println("Cannot find the host");
-      }
-      catch(IOException ioe)
-      {
-         System.out.println("Lost connection with the server");
-      }
-   }
-
-   public void sendTheAnswer()
-   {
-      try
-      {
-         pw.println(answer.getText());
-         pw.flush();
-         answer.setText("");
-      }
-      catch(NullPointerException ioe)
-      {
-         System.err.println("Error, you must connect to the server before sending a message");
-      } 
-   }  
-
-   public void actionPerformed(ActionEvent ae)
-   {     
-      if(ae.getActionCommand().equals("Send"))
-      {
-         sendTheAnswer();
-      }
-      else if(ae.getActionCommand().equals("Connect"))
-      {
-         connect();
-      }
-   }
-
-   class Reader extends Thread
-   {      
-      String msg;
+      Socket s;
+      BufferedReader br = null;
+      PrintWriter pw = null;   
+      JTextField answer;
+      JTextField theAddresses;
+      String playerName;
       
-      public void run()
-      {  
+      public SenderGUI(JTextField _answer, JTextField _theAddresses, String _playerName)
+      {
+         answer = _answer;
+         theAddresses = _theAddresses;
+         playerName = _playerName;
+      }
+      
+      public void connect()
+      {
          try
          {
-            while(true)
-            {
-               msg = br.readLine();
-               System.out.println(msg);
-               //messageArea.append(msg + "\n");
-            }
+            System.out.println(theAddresses.getText());
+            s = new Socket(theAddresses.getText(), 16100);
+            br = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
+            new Reader().start();
+            System.out.println(playerName);
+            pw.println(playerName);
+            pw.flush();                 
+         }
+         catch(UnknownHostException uhe)
+         {
+            System.err.println("Cannot find the host");
          }
          catch(IOException ioe)
          {
+            System.out.println("Lost connection with the server");
          }
+      }
+   
+      public void sendTheAnswer()
+      {
+         try
+         {
+            pw.println(answer.getText());
+            pw.flush();
+            answer.setText("");
+         }
+         catch(NullPointerException ioe)
+         {
+            System.err.println("Error, you must connect to the server before sending a message");
+         } 
+      }  
+   
+      public void actionPerformed(ActionEvent ae)
+      {     
+         if(ae.getActionCommand().equals("Send"))
+         {
+            sendTheAnswer();
+         }
+         else if(ae.getActionCommand().equals("Connect"))
+         {
+            connect();
+         }
+      }
+   
+      class Reader extends Thread
+      {      
+         String msg;
          
+         public void run()
+         {  
+            try
+            {
+               while(true)
+               {
+                  msg = br.readLine();
+                  if(msg.contains("Question: "))
+                  {
+                     header.setText(msg);
+                  }
+                  else
+                  {
+                     System.out.println(msg);
+                  }
+                  //messageArea.append(msg + "\n");
+               }
+            }
+            catch(IOException ioe)
+            {
+            }
+         }
       }
    }
 }
+
 
 
 
