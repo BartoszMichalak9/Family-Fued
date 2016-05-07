@@ -39,7 +39,7 @@ public class MainGUIClient
       JFrame frame = new JFrame();
       frame.setSize(800, 800);
       frame.setTitle("Family Feud");
-      frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setLocationRelativeTo(null);
       
       northPanel = new JPanel(new GridLayout(2, 1));
@@ -66,20 +66,28 @@ public class MainGUIClient
       centerPanel = new JPanel(new GridLayout(4,2));
       answerOne = new JButton("1");
       centerPanel.add(answerOne);
+      answerOne.setEnabled(false);
       answerTwo = new JButton("2");
       centerPanel.add(answerTwo);
+      answerTwo.setEnabled(false);
       answerThree = new JButton("3");
       centerPanel.add(answerThree);
+      answerThree.setEnabled(false);
       answerFour = new JButton("4");
       centerPanel.add(answerFour);
+      answerFour.setEnabled(false);
       answerFive = new JButton("5");
       centerPanel.add(answerFive);
+      answerFive.setEnabled(false);
       answerSix = new JButton("6");
       centerPanel.add(answerSix);
+      answerSix.setEnabled(false);
       answerSeven = new JButton("7");
       centerPanel.add(answerSeven);
+      answerSeven.setEnabled(false);
       answerEight = new JButton("8");
       centerPanel.add(answerEight);
+      answerEight.setEnabled(false);
       frame.add(centerPanel, BorderLayout.CENTER);
       
       southPanel = new JPanel();
