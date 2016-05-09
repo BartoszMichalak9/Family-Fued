@@ -10,6 +10,9 @@ public class MainGUIClient
 {
    private static String aPlayer;
    
+   private JPanel chatPanel;
+   private JPanel chatSouth;
+   
    private JPanel panelOneNorth;
    private JLabel serverLabel;
    private JTextField ipAddress;
@@ -22,12 +25,16 @@ public class MainGUIClient
    private JPanel northPanel;
    
    private JPanel eastPanel;
+   private JTextArea messageArea;
+   private JTextField message;
+   private JButton sendMessage;    
    
-   private JPanel southPanel;
+   private JPanel insideMessage;
    private JTextField answer;
-   private JButton sendAnswer;    
+   private JButton sendAnswer;
    
    private JPanel centerPanel;
+   private JPanel insideCenterGrid;
    private JButton answerOne;
    private JButton answerTwo;
    private JButton answerThree;
@@ -41,7 +48,7 @@ public class MainGUIClient
    {
       aPlayer = _aPlayer;
       JFrame frame = new JFrame();
-      frame.setSize(800, 800);
+      frame.setSize(1000, 800);
       frame.setTitle("Family Feud");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setLocationRelativeTo(null);
@@ -65,44 +72,65 @@ public class MainGUIClient
       panelTwoNorth.setBackground(Color.BLUE);
       northPanel.add(panelTwoNorth);
       
-      frame.add(northPanel, BorderLayout.NORTH);     
+      frame.add(northPanel, BorderLayout.NORTH); 
       
-      centerPanel = new JPanel(new GridLayout(4,2));
+      chatPanel = new JPanel(new BorderLayout());
+      
+      eastPanel = new JPanel(new GridLayout(2,2));
+      messageArea = new JTextArea(46, 30);
+      eastPanel.add(messageArea);
+      chatPanel.add(eastPanel, BorderLayout.CENTER);
+      
+      chatSouth = new JPanel();
+      message = new JTextField(10);
+      chatSouth.add(message);
+      sendMessage = new JButton("Send Message");
+      chatSouth.add(sendMessage); 
+      chatPanel.add(chatSouth, BorderLayout.SOUTH);
+           
+      frame.add(chatPanel, BorderLayout.EAST);   
+      
+      centerPanel = new JPanel(new BorderLayout());
+      insideCenterGrid = new JPanel(new GridLayout(4,2));
+      
       answerOne = new JButton("1");
-      centerPanel.add(answerOne);
+      insideCenterGrid.add(answerOne);
       answerOne.setEnabled(false);
       answerTwo = new JButton("2");
-      centerPanel.add(answerTwo);
+      insideCenterGrid.add(answerTwo);
       answerTwo.setEnabled(false);
       answerThree = new JButton("3");
-      centerPanel.add(answerThree);
+      insideCenterGrid.add(answerThree);
       answerThree.setEnabled(false);
       answerFour = new JButton("4");
-      centerPanel.add(answerFour);
+      insideCenterGrid.add(answerFour);
       answerFour.setEnabled(false);
       answerFive = new JButton("5");
-      centerPanel.add(answerFive);
+      insideCenterGrid.add(answerFive);
       answerFive.setEnabled(false);
       answerSix = new JButton("6");
-      centerPanel.add(answerSix);
+      insideCenterGrid.add(answerSix);
       answerSix.setEnabled(false);
       answerSeven = new JButton("7");
-      centerPanel.add(answerSeven);
+      insideCenterGrid.add(answerSeven);
       answerSeven.setEnabled(false);
       answerEight = new JButton("8");
-      centerPanel.add(answerEight);
+      insideCenterGrid.add(answerEight);
       answerEight.setEnabled(false);
+      centerPanel.add(insideCenterGrid);
+      
+      insideMessage = new JPanel();
+      answer = new JTextField(20);
+      insideMessage.add(answer);
+      sendAnswer = new JButton("Submit Answer");
+      insideMessage.add(sendAnswer);      
+      centerPanel.add(insideMessage, BorderLayout.SOUTH);      
+
       frame.add(centerPanel, BorderLayout.CENTER);
       
-      southPanel = new JPanel();
-      answer = new JTextField(20);
-      southPanel.add(answer);
-      sendAnswer = new JButton("Send");
-      southPanel.add(sendAnswer);
-      frame.add(southPanel, BorderLayout.SOUTH);
-      
-      SenderGUI sender = new SenderGUI(answer, ipAddress, aPlayer);
+      SenderGUI sender = new SenderGUI(answer, ipAddress, aPlayer, message, messageArea);
       sendAnswer.addActionListener(sender);
+      sendMessage.addActionListener(sender);
       connect.addActionListener(sender);
       
       frame.setVisible(true);
@@ -121,12 +149,17 @@ public class MainGUIClient
       JTextField answer;
       JTextField theAddresses;
       String playerName;
+      JTextField message;
+      JTextArea messageArea;
+
       
-      public SenderGUI(JTextField _answer, JTextField _theAddresses, String _playerName)
+      public SenderGUI(JTextField _answer, JTextField _theAddresses, String _playerName, JTextField _message, JTextArea _messageArea)
       {
          answer = _answer;
          theAddresses = _theAddresses;
          playerName = _playerName;
+         message = _message;
+         messageArea = _messageArea;
       }
       
       public void connect()
@@ -155,7 +188,7 @@ public class MainGUIClient
       {
          try
          {
-            pw.println(answer.getText());
+            pw.println("Answer: "+answer.getText());
             pw.flush();
             answer.setText("");
          }
@@ -163,15 +196,33 @@ public class MainGUIClient
          {
             System.err.println("Error, you must connect to the server before sending a message");
          } 
-      }  
-   
+      } 
+      
+      public void sendTheMessage()
+      {
+         try
+         {
+            pw.println(aPlayer+": "+message.getText());
+            pw.flush();
+            message.setText("");
+         }
+         catch(NullPointerException ioe)
+         {
+            System.err.println("Error, you must connect to the server before sending a message");
+         } 
+      }      
+      
       public void actionPerformed(ActionEvent ae)
       {     
-         if(ae.getActionCommand().equals("Send"))
+         if(ae.getActionCommand().equals("Submit Answer"))
          {
             sendTheAnswer();
          }
-         else if(ae.getActionCommand().equals("Connect"))
+         else if(ae.getActionCommand().equals("Send Message"))
+         {
+            sendTheMessage();
+         }
+         else if(ae.getActionCommand().equals("Ready"))
          {
             connect();
          }
@@ -194,11 +245,16 @@ public class MainGUIClient
                      header.setText(msg);
                      header.setFont(new Font("Arial", Font.BOLD, 18));
                   }
-                  else
+                  else if(msg.contains("Player Name: "))
                   {
-                     System.out.println(msg);
+                     String temp = msg.substring(12);
+                     messageArea.append(temp + "\n");
                   }
                }
+            }
+            catch(NullPointerException npe)
+            {
+               System.err.println("Server has been shutdown. Thank you for playing.");
             }
             catch(IOException ioe)
             {

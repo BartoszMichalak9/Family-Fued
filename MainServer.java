@@ -15,6 +15,7 @@ public class MainServer
    private String[] playerName = new String[4];
    private int playerCount = -1;
    private int readyCount = 0;
+   private int index = 0;
    public MainServer()
    {
       ServerSocket ss;
@@ -47,7 +48,7 @@ public class MainServer
       
       public String makeQuestion(){
          boolean check = false;
-         int index = generate.nextInt(25);
+         index = generate.nextInt(25);
          String output = "";
          while(!check){
          if(!numsCalled.contains(index)){
@@ -61,6 +62,10 @@ public class MainServer
          }
       }
       return "error";
+      }
+      
+      public String makeAnswer(){
+         return answersList.get(index);
       }
       
       public void broadcast(String msg){
@@ -85,6 +90,7 @@ public class MainServer
             addAnswers();
             addQuestions();
             
+       try{
             while(true)
             {
                if(playerCount<3){
@@ -108,8 +114,15 @@ public class MainServer
                   broadcast(outputMessage);
                   playerCount = 0;               
               }
+              
+              
               broadcast(outputMessage);
             }
+           }
+           catch(NullPointerException npe)
+           {
+               System.err.println("Client has disconnected");
+           }
          }
          catch(IOException ioe){
          }

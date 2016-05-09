@@ -51,7 +51,7 @@ public class PlayerChoice extends JFrame implements ActionListener
       if(ae.getActionCommand().equals("OK"));
       {
          playerOneEntered = playerOneText.getText();
-         new MainGUIClient("Player Name:"+playerOneEntered);
+         new MainGUIClient("Player Name: "+playerOneEntered);
          frame.setVisible(false);
       }
    }   
