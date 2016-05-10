@@ -73,7 +73,6 @@ public class MainServer
                {                  
                   p.println(msg);
                   p.flush();
-                  System.out.println(msg);
                }
       }
 
@@ -114,7 +113,18 @@ public class MainServer
                   broadcast(outputMessage);
                   playerCount = 0;               
               }
-              
+              if(outputMessage.contains("Answer: ")){
+                
+                String temp = answersList.get(index);
+                String[] x = temp.split(",");
+                for(String list : x){
+                  System.out.println("Database Answers: "+list);
+                  if(outputMessage.contains(list)){
+                     broadcast("Correct: " + list);
+                  }
+                  
+                }
+              }
               
               broadcast(outputMessage);
             }

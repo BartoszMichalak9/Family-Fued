@@ -250,6 +250,41 @@ public class MainGUIClient
                      String temp = msg.substring(22);
                      messageArea.append(temp + "\n");
                   }
+                  else if(msg.contains("Correct: "))
+                  {
+                     if(msg.contains("80"))
+                     {
+                        answerOne.setText(msg);
+                     }
+                     else if(msg.contains("70"))
+                     {
+                        answerTwo.setText(msg);
+                     }                     
+                    else if(msg.contains("60"))
+                     {
+                        answerThree.setText(msg);
+                     }
+                    else if(msg.contains("50"))
+                     {
+                        answerFour.setText(msg);
+                     }
+                    else if(msg.contains("40"))
+                     {
+                        answerFive.setText(msg);
+                     }
+                    else if(msg.contains("30"))
+                     {
+                        answerSix.setText(msg);
+                     }
+                    else if(msg.contains("20"))
+                     {
+                        answerSeven.setText(msg);
+                     }
+                    else if(msg.contains("10"))
+                     {
+                        answerEight.setText(msg);
+                     }
+                  }
                }
             }
             catch(NullPointerException npe)
