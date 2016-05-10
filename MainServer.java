@@ -73,7 +73,7 @@ public class MainServer
                {                  
                   p.println(msg);
                   p.flush();
-                  System.out.println("Message Sent:  "+msg);
+                  System.out.println(msg);
                }
       }
 
@@ -95,7 +95,7 @@ public class MainServer
             {
                if(playerCount<3){
                   outputMessage = brRun.readLine();
-                  if(outputMessage.contains("Player Name:")){
+                  if(outputMessage.contains("Player Name:") && !outputMessage.contains("Message:")){
                         playerCount++;
                         System.out.println(playerCount);
                         /* if(playerCount<4){

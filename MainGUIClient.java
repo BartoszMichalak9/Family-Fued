@@ -202,7 +202,7 @@ public class MainGUIClient
       {
          try
          {
-            pw.println(aPlayer+": "+message.getText());
+            pw.println("Message: " + aPlayer+": "+message.getText());
             pw.flush();
             message.setText("");
          }
@@ -245,9 +245,9 @@ public class MainGUIClient
                      header.setText(msg);
                      header.setFont(new Font("Arial", Font.BOLD, 18));
                   }
-                  else if(msg.contains("Player Name: "))
+                  else if(msg.contains("Message: "))
                   {
-                     String temp = msg.substring(12);
+                     String temp = msg.substring(22);
                      messageArea.append(temp + "\n");
                   }
                }
