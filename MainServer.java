@@ -111,17 +111,23 @@ public class MainServer
                   
                   outputMessage = "Question: "+ makeQuestion();
                   broadcast(outputMessage);
-                  playerCount = 0;               
+                  playerCount = -1;
+                  broadcast("RESET");             
               }
               if(outputMessage.contains("Answer: ")){
                 
                 String temp = answersList.get(index);
                 String[] x = temp.split(",");
                 for(String list : x){
+                 
                   System.out.println("Database Answers: "+list);
-                  if(outputMessage.contains(list)){
+                  System.out.println(outputMessage);
+                  if(list.contains(outputMessage.substring(8))){
+                     System.out.println("Correct: " + list+"\n");
                      broadcast("Correct: " + list);
                   }
+                  else
+                     broadcast("WRONG!!!");
                   
                 }
               }

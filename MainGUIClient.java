@@ -190,6 +190,7 @@ public class MainGUIClient
          {
             pw.println("Answer: "+answer.getText());
             pw.flush();
+            System.out.println("Answer: "+answer.getText());
             answer.setText("");
          }
          catch(NullPointerException ioe)
@@ -284,6 +285,21 @@ public class MainGUIClient
                      {
                         answerEight.setText(msg);
                      }
+                  }
+                  else if(msg.contains("RESET")){
+                     answerOne.setText("1");
+                     answerTwo.setText("2");
+                     answerThree.setText("3");
+                     answerFour.setText("4");
+                     answerFive.setText("5");
+                     answerSix.setText("6");
+                     answerSeven.setText("7");
+                     answerEight.setText("8");
+                     
+                  }
+                  else if (msg.contains("WRONG!!!")){
+                     //sendAnswer.setEnabled(false);
+                     //prompt here that a player got it wrong
                   }
                }
             }
