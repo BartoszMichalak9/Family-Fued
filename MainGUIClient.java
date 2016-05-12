@@ -12,6 +12,11 @@ public class MainGUIClient
    
    private JPanel chatPanel;
    private JPanel chatSouth;
+   private JPanel playerPanel;
+   private JLabel pOne;
+   private JLabel pTwo;
+   private JLabel pThree;
+   private JLabel pFour;   
    
    private JPanel panelOneNorth;
    private JLabel serverLabel;
@@ -77,9 +82,20 @@ public class MainGUIClient
       chatPanel = new JPanel(new BorderLayout());
       
       eastPanel = new JPanel(new GridLayout(2,2));
-      messageArea = new JTextArea(46, 30);
+      messageArea = new JTextArea(16, 30);
       eastPanel.add(messageArea);
       chatPanel.add(eastPanel, BorderLayout.CENTER);
+      
+      playerPanel = new JPanel(new GridLayout(4,1, 20, 20));
+      pOne = new JLabel("Player One: ");
+      playerPanel.add(pOne);
+      pTwo = new JLabel("Player Two: ");
+      playerPanel.add(pTwo);
+      pThree = new JLabel("Player Three: ");
+      playerPanel.add(pThree);
+      pFour = new JLabel("Player Four: ");
+      playerPanel.add(pFour);
+      chatPanel.add(playerPanel, BorderLayout.NORTH);
       
       chatSouth = new JPanel();
       message = new JTextField(10);

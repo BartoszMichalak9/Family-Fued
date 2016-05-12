@@ -16,6 +16,7 @@ public class MainServer
    private int playerCount = -1;
    private int readyCount = 0;
    private int index = 0;
+   
    public MainServer()
    {
       ServerSocket ss;
