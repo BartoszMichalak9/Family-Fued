@@ -62,7 +62,7 @@ public class MainServer
             index = generate.nextInt(25);             
          }
       }
-      return "error";
+         return "error";
       }
       
       public String makeAnswer(){

@@ -341,8 +341,7 @@ public class MainGUIClient
                      
                   }
                   else if (msg.contains("WRONG!!!")){
-                     //sendAnswer.setEnabled(false);
-                     //prompt here that a player got it wrong
+                     JOptionPane.showMessageDialog(null, msg.substring(8)+" "+aPlayer+" submitted was wrong.");
                   }
                }
             }
