@@ -8,6 +8,7 @@ import java.io.*;
 
 public class MainGUIClient
 {
+   private JFrame frame;  
    private static String aPlayer;
    
    private JPanel chatPanel;
@@ -48,14 +49,30 @@ public class MainGUIClient
    private JButton answerSix;
    private JButton answerSeven;
    private JButton answerEight;
+   private PrintWriter pw = null;
    
    public MainGUIClient(String _aPlayer)
    {
       aPlayer = _aPlayer;
-      JFrame frame = new JFrame();
+      frame = new JFrame();
       frame.setSize(1000, 800);
       frame.setTitle("Family Feud");
-      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      //Overides the default window closing
+      WindowListener exitListener = new WindowAdapter() {  
+         public void windowClosing(WindowEvent e) {         
+         System.out.println("Client "+aPlayer.substring(12)+" disconnected.");
+         try{
+            pw.println("DISCONNECT: "+aPlayer.substring(12)+" disconnected.");
+            pw.flush();
+            }
+            catch(Exception ee){
+               System.out.println("Server is not connected.");
+            }
+         System.exit(0);
+           }};
+         frame.addWindowListener(exitListener);
+
       frame.setLocationRelativeTo(null);
       
       northPanel = new JPanel(new GridLayout(2, 1));
@@ -160,8 +177,7 @@ public class MainGUIClient
    class SenderGUI implements ActionListener
    {
       Socket s;
-      BufferedReader br = null;
-      PrintWriter pw = null;   
+      BufferedReader br = null;   
       JTextField answer;
       JTextField theAddresses;
       String playerName;
@@ -182,7 +198,7 @@ public class MainGUIClient
       {
          try
          {
-            System.out.println(theAddresses.getText());
+            System.out.println("IP Address: "+theAddresses.getText());
             s = new Socket(theAddresses.getText(), 16100);
             br = new BufferedReader(new InputStreamReader(s.getInputStream()));
             pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
@@ -256,8 +272,19 @@ public class MainGUIClient
                while(true)
                {
                   msg = br.readLine();
-
-                  if(msg.contains("Question: "))
+                  if(msg.contains("NameHeader, ")){
+                     String input = msg.substring(11);
+                    
+                     String[] output = input.split(",");
+                      for(String x: output){
+                        System.out.println("Testing...: "+x);
+                     }
+                     pOne.setText(pOne.getText()+"\t"+output[1]);
+                     pTwo.setText(pTwo.getText()+"\t"+output[2]);
+                     pThree.setText(pThree.getText()+"\t"+output[3]);
+                     pFour.setText(pFour.getText()+"\t"+output[4]);
+                  }
+                  else if(msg.contains("Question: "))
                   {
                      header.setText(msg);
                      header.setFont(new Font("Arial", Font.BOLD, 18));

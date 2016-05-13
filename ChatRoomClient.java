@@ -79,7 +79,7 @@ public class ChatRoomClient
       frame.setLocationRelativeTo(null);
       frame.setResizable(false);
       frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-      //Ovverides the default window closing
+      //Overides the default window closing
       WindowListener exitListener = new WindowAdapter() {  
          public void windowClosing(WindowEvent e) {         
          System.exit(0);

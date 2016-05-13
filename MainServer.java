@@ -71,9 +71,16 @@ public class MainServer
       
       public void broadcast(String msg){
          for(PrintWriter p: printers)
-               {                  
-                  p.println(msg);
-                  p.flush();
+               {
+                  if(msg.contains("DISCONNECT: ")){
+                     System.out.println(msg.substring(12));
+                     playerCount--;
+                     break;
+                  }
+                  else{                
+                     p.println(msg);
+                     p.flush();
+                  }
                }
       }
 
@@ -93,47 +100,50 @@ public class MainServer
        try{
             while(true)
             {
-               if(playerCount<3){
-                  outputMessage = brRun.readLine();
-                  if(outputMessage.contains("Player Name:") && !outputMessage.contains("Message:")){
-                        playerCount++;
-                        System.out.println(playerCount);
-                        /* if(playerCount<4){
+               outputMessage = brRun.readLine();
+               
+                  if(playerCount<3){
+                     if(outputMessage.contains("Player Name:") && !outputMessage.contains("Message:")){
                            playerCount++;
-                           }This will be for limiting the player count*/
-                        playerName[playerCount] = outputMessage.substring(12);
-                        System.out.println("Name entered: "+playerName[playerCount]);
-                        System.out.println("Player: "+playerName[playerCount]+ " connected.");
-   
-                   }                   
-               }               
-                             
-              if(playerCount==3){
-                  
-                  outputMessage = "Question: "+ makeQuestion();
-                  broadcast(outputMessage);
-                  playerCount = -1;
-                  broadcast("RESET");             
-              }
-              if(outputMessage.contains("Answer: ")){
-                
-                String temp = answersList.get(index);
-                String[] x = temp.split(",");
-                for(String list : x){
-                 
-                  System.out.println("Database Answers: "+list);
-                  System.out.println(outputMessage);
-                  if(list.contains(outputMessage.substring(8))){
-                     System.out.println("Correct: " + list+"\n");
-                     broadcast("Correct: " + list);
-                  }
-                  else
-                     broadcast("WRONG!!!");
-                  
-                }
-              }
+                           System.out.println("Player Number: "+(playerCount+1));
+                           playerName[playerCount] = outputMessage.substring(12);
+                           System.out.println("Name entered: "+playerName[playerCount]);
+                           System.out.println("Player: "+playerName[playerCount]+ " connected.\n#########\n");
+      
+                      }                   
+                  }               
+                                
+                 if(playerCount==3){
+                     String teamMemberNames = "NameHeader, ";
+                     for(String list: playerName){
+                     teamMemberNames +=(list+", ");
+                     }
+                     broadcast("NameHeader: "+teamMemberNames);
+                     outputMessage = "Question: "+ makeQuestion();
+                     broadcast(outputMessage);
+                     playerCount = -1;
+                     broadcast("RESET");             
+                 }
+                 if(outputMessage.contains("Answer: ")){
+                   
+                   String temp = answersList.get(index);
+                   String[] x = temp.split(",");
+                   for(String list : x){
+                    
+                     System.out.println("Database Answers: "+list);
+                     System.out.println(outputMessage);
+                     if(list.contains(outputMessage.substring(8))){
+                        System.out.println("Correct: " + list+"\n");
+                        broadcast("Correct: " + list);
+                     }
+                     else
+                        broadcast("WRONG!!!");
+                     
+                   }
+                 }              
+                               
+                 broadcast(outputMessage);
               
-              broadcast(outputMessage);
             }
            }
            catch(NullPointerException npe)
