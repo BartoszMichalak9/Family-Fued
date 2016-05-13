@@ -136,9 +136,9 @@ public class MainServer
                         System.out.println("Correct: " + list+"\n");
                         broadcast("Correct: " + list);
                      }
-                     else
-                        broadcast("WRONG!!!");
-                     
+                     else{
+                        //broadcast("WRONG!!!");
+                     }
                    }
                  }              
                                
