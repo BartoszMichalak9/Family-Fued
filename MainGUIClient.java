@@ -24,7 +24,7 @@ public class MainGUIClient
    private JTextField ipAddress;
    private JTextField playerName;
    private JButton connect;
-   
+   private JButton readyUp;
    private JPanel panelTwoNorth;
    private JLabel header;
 
@@ -61,10 +61,11 @@ public class MainGUIClient
       //Overides the default window closing
       WindowListener exitListener = new WindowAdapter() {  
          public void windowClosing(WindowEvent e) {         
-         System.out.println("Client "+aPlayer.substring(12)+" disconnected.");
-         try{
-            pw.println("DISCONNECT: "+aPlayer.substring(12)+" disconnected.");
-            pw.flush();
+            try{
+               System.out.println("Client "+aPlayer.substring(12)+" disconnected.");
+         
+               pw.println("DISCONNECT: "+aPlayer.substring(12)+" disconnected.");
+               pw.flush();
             }
             catch(Exception ee){
                System.out.println("Server is not connected.");
@@ -82,8 +83,12 @@ public class MainGUIClient
       panelOneNorth.add(serverLabel);
       ipAddress = new JTextField(10);
       panelOneNorth.add(ipAddress);
-      connect = new JButton("Ready");      
+      connect = new JButton("Connect");      
+      readyUp = new JButton("Ready");
       panelOneNorth.add(connect);
+      panelOneNorth.add(readyUp);
+      readyUp.setEnabled(false);
+      
       northPanel.add(panelOneNorth);
       
       panelTwoNorth = new JPanel();
@@ -156,6 +161,7 @@ public class MainGUIClient
       answer = new JTextField(20);
       insideMessage.add(answer);
       sendAnswer = new JButton("Submit Answer");
+      sendAnswer.setEnabled(false);
       insideMessage.add(sendAnswer);      
       centerPanel.add(insideMessage, BorderLayout.SOUTH);      
 
@@ -165,6 +171,7 @@ public class MainGUIClient
       sendAnswer.addActionListener(sender);
       sendMessage.addActionListener(sender);
       connect.addActionListener(sender);
+      readyUp.addActionListener(sender);
       
       frame.setVisible(true);
    }
@@ -215,6 +222,11 @@ public class MainGUIClient
             System.out.println("Lost connection with the server");
          }
       }
+      public void readyUp(){
+         pw.println("READY!!!");
+         pw.flush(); 
+      
+      }
    
       public void sendTheAnswer()
       {
@@ -250,21 +262,29 @@ public class MainGUIClient
          if(ae.getActionCommand().equals("Submit Answer"))
          {
             sendTheAnswer();
+            sendAnswer.setEnabled(false);
          }
          else if(ae.getActionCommand().equals("Send Message"))
          {
             sendTheMessage();
+            
          }
-         else if(ae.getActionCommand().equals("Ready"))
+         else if(ae.getActionCommand().equals("Connect"))
          {
+            readyUp.setEnabled(true);
             connect();
+            
+         }
+         else if(ae.getActionCommand().equals("Ready")){
+            connect.setEnabled(false);
+            readyUp();
          }
       }
    
       class Reader extends Thread
       {      
          String msg;
-         
+         boolean gotHeader = false;
          public void run()
          {  
             try
@@ -272,17 +292,28 @@ public class MainGUIClient
                while(true)
                {
                   msg = br.readLine();
-                  if(msg.contains("NameHeader, ")){
-                     String input = msg.substring(11);
+                  if(msg.contains("LOCK")){
+                     sendAnswer.setEnabled(false);
+                  }
+                  else if(msg.contains("UNLOCK")){
+                     sendAnswer.setEnabled(true);
+
+                  }
+                  else if(msg.contains("NameHeader, ")){
+                    if(!gotHeader){
+                        String input = msg.substring(11);
                     
-                     String[] output = input.split(",");
-                      for(String x: output){
-                        System.out.println("Testing...: "+x);
-                     }
-                     pOne.setText(pOne.getText()+"\t"+output[1]);
-                     pTwo.setText(pTwo.getText()+"\t"+output[2]);
-                     pThree.setText(pThree.getText()+"\t"+output[3]);
-                     pFour.setText(pFour.getText()+"\t"+output[4]);
+                        String[] output = input.split(",");
+                         for(String x: output){
+                           System.out.println("Testing...: "+x);
+                        }
+                        pOne.setText(pOne.getText()+"\t"+output[1]);
+                        pTwo.setText(pTwo.getText()+"\t"+output[2]);
+                        pThree.setText(pThree.getText()+"\t"+output[3]);
+                        pFour.setText(pFour.getText()+"\t"+output[4]);
+                        gotHeader = true;
+                    }
+                    
                   }
                   else if(msg.contains("Question: "))
                   {
@@ -328,6 +359,7 @@ public class MainGUIClient
                      {
                         answerEight.setText(msg);
                      }
+                     //sendAnswer.setEnabled(true);
                   }
                   else if(msg.contains("RESET")){
                      answerOne.setText("1");
@@ -338,6 +370,11 @@ public class MainGUIClient
                      answerSix.setText("6");
                      answerSeven.setText("7");
                      answerEight.setText("8");
+                     /*pOne.setText("Player One: ");
+                     pTwo.setText("Player Two: ");
+                     pThree.setText("Player Three: ");
+                     pFour.setText("Player Four: ");
+                    */ 
                      
                   }
                   else if (msg.contains("WRONG!!!")){
