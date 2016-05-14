@@ -98,18 +98,20 @@ public class MainServer
             printerNumber++;
             printers.get(printerNumber).println("UNLOCK");
             printers.get(printerNumber).flush();
+            System.out.println("1: " +printerNumber);
          }
-         if(printerNumber>= 0 && printerNumber<3){
-            
+         else if(printerNumber>= 0 && printerNumber<3){
+            printerNumber++;
             printers.get(printerNumber).println("UNLOCK");
             printers.get(printerNumber).flush();
-            printerNumber++;
+            System.out.println("2: " +printerNumber);
          }        
          else{
             printerNumber = 0;
             printers.get(printerNumber).println("UNLOCK");
             printers.get(printerNumber).flush();
             //set the unlock to printer zero
+            System.out.println("3: " +printerNumber);
          }
       
       }
@@ -118,8 +120,15 @@ public class MainServer
       }
       
       public void unlockCurrentClient(){
+         System.out.println(printerNumber);
          printers.get(printerNumber).println("UNLOCK");
          printers.get(printerNumber).flush();
+      }
+      
+      public void firstClientUnlock()
+      {
+         printers.get(0).println("UNLOCK");
+         printers.get(0).flush();
       }
    
       public void run()
@@ -146,8 +155,8 @@ public class MainServer
                      System.out.println("Name entered: "+playerName[playerCount]);
                      System.out.println("Player: "+playerName[playerCount]+ " connected.\n\n");   
                      
-                    }     
-                   if(playerCount == 3 ){                                             
+                  }     
+                  if(playerCount == 3 ){                                             
                         
                      String teamMemberNames = "NameHeader, ";
                                       
@@ -156,13 +165,15 @@ public class MainServer
                      }
                            //this is for the list of players that are connected
                      broadcast("NameHeader: "+teamMemberNames);
+                     unlockNextClient();
+                     playerCount++;
                      System.out.println("NAMES HAVEN BEEN SENT TO THE CLIENTS!!!");    
                   }                        
                   else if(playerCount>=4){
                         //this should get a tag
-                        broadcast("Message: A spectator has been added");
-                        playerCount++;
-                     }
+                     broadcast("SPECTATOR: ");
+                     playerCount++;
+                  }
                      
                                       
                }          
@@ -174,14 +185,16 @@ public class MainServer
                   }
                   else if(questionCount == 4){
                      questionCount = 1;
+                     broadcast("RESET");
                      outputMessage = "Question: "+ makeQuestion();
                      broadcast(outputMessage);
-                     //unlockNextClient(); 
+                     firstClientUnlock(); 
                   }  
                                 
                }
                   
                else if(outputMessage.contains("Answer: ")){
+                  boolean wrongs = false;
                   printerNumber = Integer.parseInt(getThreadName());
                   System.out.println("THREAD SUBMISSION NUMBER: "+printerNumber);
                   lockClients();
@@ -197,21 +210,26 @@ public class MainServer
                         System.out.println("Correct: " + list+"\n");
                         broadcast("Correct: " + list);
                         unlockCurrentClient();
+                        break;
                            //use the current thread's name and unlock it again
                      }
                      else{
-                        //broadcast("WRONG!!!");
+                        wrongs = true;
                      }
+                     
+                  }
+                  if(wrongs){
+                     unlockNextClient();
+                     wrongs = false;
+                  
                   }
                }              
-                               
                broadcast(outputMessage);
             }
          }              
             
          catch(NullPointerException npe)
          {
-            System.err.println("Client has disconnected");
          }        
          catch(IOException ioe){
          }

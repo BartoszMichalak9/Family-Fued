@@ -46,7 +46,7 @@ public class StartUp extends JFrame implements ActionListener
    public StartUp()
    {
       //Creates a JFrame object called frame
-      JFrame frame = new JFrame();
+      frame = new JFrame();
       //Sets the size of the frame
       frame.setSize(588, 400);
       //Sets the title of the frame
@@ -101,7 +101,7 @@ public class StartUp extends JFrame implements ActionListener
       
    /*
     * The actoinPerformed() method listens for a call from the JButton's Action Listener in order to tell when a button is pressed.
-    * @param ActionEvent ae Allows the action command to be performed 
+    * @param ActionEvent ae Allows the action com-mand to be performed 
     */    
    public void actionPerformed(ActionEvent ae)
    {

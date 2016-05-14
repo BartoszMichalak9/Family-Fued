@@ -8,7 +8,14 @@ import java.io.*;
 
 public class MainGUIClient
 {
-   private JFrame frame;  
+   private JFrame frame;
+   
+   private int scoreOne = 0;
+   private int scoreTwo = 0;
+   private int scoreThree = 0;
+   private int scoreFour = 0;
+   private int checkPlayer = 0;
+     
    private static String aPlayer;
    
    private JPanel chatPanel;
@@ -292,25 +299,25 @@ public class MainGUIClient
                while(true)
                {
                   msg = br.readLine();
-                  if(msg.contains("LOCK")){
-                     sendAnswer.setEnabled(false);
-                  }
-                  else if(msg.contains("UNLOCK")){
+                  if(msg.equals("UNLOCK")){
                      sendAnswer.setEnabled(true);
+                     System.out.println("I was told to unlock");
 
+                  }                  
+                  else if(msg.equals("LOCK")){
+                     sendAnswer.setEnabled(false);
+                     System.out.println("I WAS TOLD TO LOCK");
                   }
                   else if(msg.contains("NameHeader, ")){
                     if(!gotHeader){
                         String input = msg.substring(11);
                     
                         String[] output = input.split(",");
-                         for(String x: output){
-                           System.out.println("Testing...: "+x);
-                        }
-                        pOne.setText(pOne.getText()+"\t"+output[1]);
-                        pTwo.setText(pTwo.getText()+"\t"+output[2]);
-                        pThree.setText(pThree.getText()+"\t"+output[3]);
-                        pFour.setText(pFour.getText()+"\t"+output[4]);
+                   
+                        pOne.setText(pOne.getText()+"\t"+output[1] + "\tScore: ");
+                        pTwo.setText(pTwo.getText()+"\t"+output[2]  + "\tScore: ");
+                        pThree.setText(pThree.getText()+"\t"+output[3]  + "\tScore: ");
+                        pFour.setText(pFour.getText()+"\t"+output[4]  + "\tScore: ");
                         gotHeader = true;
                     }
                     
@@ -330,34 +337,162 @@ public class MainGUIClient
                      if(msg.contains("80"))
                      {
                         answerOne.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 80;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 80;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 80;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 80;
+                        }                         
                      }
                      else if(msg.contains("70"))
                      {
                         answerTwo.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 70;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 70;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 70;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 70;
+                        }                        
                      }                     
                     else if(msg.contains("60"))
                      {
                         answerThree.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 60;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 60;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 60;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 60;
+                        }                         
                      }
                     else if(msg.contains("50"))
                      {
                         answerFour.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 50;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 50;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 50;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 50;
+                        }                        
                      }
                     else if(msg.contains("40"))
                      {
                         answerFive.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 40;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 40;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 40;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 40;
+                        }                        
                      }
                     else if(msg.contains("30"))
                      {
                         answerSix.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 30;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 30;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 30;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 30;
+                        }                        
                      }
                     else if(msg.contains("20"))
                      {
                         answerSeven.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 20;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 20;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 20;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 20;
+                        }                        
                      }
                     else if(msg.contains("10"))
                      {
                         answerEight.setText(msg);
+                        if(checkPlayer == 0)
+                        {
+                           scoreOne += 10;
+                        }
+                        else if(checkPlayer == 1)
+                        {
+                           scoreTwo += 10;
+                        }
+                        else if(checkPlayer == 2)
+                        {
+                           scoreThree += 10;
+                        }                        
+                        else if(checkPlayer == 3)
+                        {
+                           scoreFour += 10;
+                        }                        
                      }
                      //sendAnswer.setEnabled(true);
                   }
@@ -370,15 +505,24 @@ public class MainGUIClient
                      answerSix.setText("6");
                      answerSeven.setText("7");
                      answerEight.setText("8");
-                     /*pOne.setText("Player One: ");
-                     pTwo.setText("Player Two: ");
-                     pThree.setText("Player Three: ");
-                     pFour.setText("Player Four: ");
-                    */ 
+                     String pOneNewText = pOne.getText();
+                     String pTwoNewText = pOne.getText();
+                     String pThreeNewText = pOne.getText();
+                     String pFourNewText = pOne.getText();
+                     pOne.setText(pOne.getText().substring(0, pOneNewText.indexOf("S") + 6)  + " " + scoreOne);
+                     pTwo.setText(pTwo.getText().substring(0, pTwoNewText.indexOf("S") + 6)  + " " + scoreTwo);
+                     pThree.setText(pThree.getText().substring(0, pThreeNewText.indexOf("S") + 6)  + " " + scoreThree);
+                     pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("S") + 6)  + " " + scoreFour);
+                     checkPlayer = 0;
                      
                   }
                   else if (msg.contains("WRONG!!!")){
+                     
                      JOptionPane.showMessageDialog(null, msg.substring(8)+" "+aPlayer+" submitted was wrong.");
+                  }
+                  else
+                  {
+                     checkPlayer++;
                   }
                }
             }
