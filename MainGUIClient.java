@@ -642,6 +642,11 @@ public class MainGUIClient
                      header.setText("Press READY to recieve the next question.");
                      header.setFont(new Font("Arial", Font.BOLD, 45));
                   }
+                  else if(msg.equals("SPECTATOR: "))
+                  {
+                     readyUp.setEnabled(false);
+                     connect.setEnabled(false);
+                  }
                }
             }
             catch(NullPointerException npe)
