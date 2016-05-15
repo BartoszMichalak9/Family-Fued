@@ -219,7 +219,8 @@ public class MainGUIClient
             pw = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
             new Reader().start();
             pw.println(playerName);
-            pw.flush();                 
+            pw.flush();
+            connect.setEnabled(false);                 
          }
          catch(UnknownHostException uhe)
          {
