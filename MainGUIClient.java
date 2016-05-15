@@ -1,3 +1,11 @@
+/*
+ * @authors Tanner Glantz, Brett Phillips, Rosalee Hacker, and Alejandro Garzon
+ * @version 05/14/2016
+ * Description: The MainGUIClient class creates and handles all the GUI visual components and
+ * also creates the connection between the client and the server.   
+ * Course: ISTE-121
+ */
+
 //imports the necesary classes for the GUI program
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +16,50 @@ import java.io.*;
 
 public class MainGUIClient
 {
+   /*
+   *@param JFrame frame creates the frame object
+   *@param int scoreOne player one score will be stored here
+   *@param int scoreTwo player two score will be stored here
+   *@param int scoreThree player three score will be stored here
+   *@param int scoreFour player four score will be stored here
+   *@param int checkPlayer compares the player's score
+   *@param int questionCounter keeps count of the questions asked
+   *@param static String aPlayer player's name stored here
+   *@param JPanel chatPanel panel for the chat elements
+   *@param JPanel chatSouth panel that has the chat elements in the south
+   *@param JPanel playerPanel panel for player elements
+   *@param JLabel pOne label that contains player one name
+   *@param JLabel pTwo label that contains player two name
+   *@param JLabel pThree label that contains player three name
+   *@param JLabel pFour label that contains player four name
+   *@param JPanel panelOneNorth panel that will be located north
+   *@param JLabel serverLabel contains the serverLabel
+   *@param JTextField ipAddress where the user enters the IP for the socket to use
+   *@param JTextField playerName user enters their name
+   *@param JButton connect connects the player to the server
+   *@param JButton readyUp user will press once connected and waiting for others to ready up
+   *@param JPanel panelTwoNorth contains elements for north side of JFrame
+   *@param JLabel header the header of the frame
+   *@param JPanel northPanel panel located in the north of frame
+   *@param JPanel eastPanel panel located in the east side of frame
+   *@param JTextArea messageArea area where chat messages are displayed
+   *@param JTextField message field where users will type their chat messages
+   *@param JButton sendMessage button used for sending messages
+   *@param JPanel insideMessage panel that holds the JTextField for answer box and JButton
+   *@param JTextField answer field where user will type the answer
+   *@param JButton sendAnswer button used for sending the answer
+   *@param JPanel centerPanel panel located in center of frame
+   *@param JPanel insideCenterGrid holds all 1-8 JButtons where answers are displayed
+   *@param JButton answerOne button where first answer is displayed
+   *@param JButton answerTwo button where second answer is displayed
+   *@param JButton answerThree button where third answer is displayed
+   *@param JButton answerFour button where fourth answer is displayed
+   *@param JButton answerFive button where fith answer is displayed
+   *@param JButton answerSix button where sixth answer is displayed
+   *@param JButton answerSeven button where seventh answer is displayed
+   *@param JButton answerEight button where eighth answer is displayed
+   *@param PrintWriter pw creates PrintWriter object
+   */
    private JFrame frame;
    
    private int scoreOne = 0;
@@ -59,6 +111,11 @@ public class MainGUIClient
    private JButton answerEight;
    private PrintWriter pw = null;
    
+   /*
+    *Main constructor for the class. It instantiates and sets all the JFrame components
+    *that will be used for the program
+    *@param String _aPlayer takes in a player  
+   */ 
    public MainGUIClient(String _aPlayer)
    {
       aPlayer = _aPlayer;
@@ -183,14 +240,30 @@ public class MainGUIClient
       
       frame.setVisible(true);
    }
-
+   
+   //MainGUIClient's main method
    public static void main(String [] args)
    {
       MainGUIClient mainClient = new MainGUIClient(aPlayer);
    }
-
+   
+   /*
+    *Inner class that deals with the connecton between the GUI and the server such as
+    *instantiating sockets, using action events, and sending answers and messages.
+    * 
+   */
    class SenderGUI implements ActionListener
    {
+   
+   /*
+   *@param Socket s creates socket object
+   *@param BufferedReader br creates buffered reader object
+   *@param JTextField answer field where answer wil be typed
+   *@param JTextField theAddresses field where the adress will be typed
+   *@param String playerName stores the player name
+   *@param JTextField message field where message will be typed
+   *@param JTextArea messageArea area where messages will be displayed
+   */
       Socket s;
       BufferedReader br = null;   
       JTextField answer;
@@ -199,7 +272,15 @@ public class MainGUIClient
       JTextField message;
       JTextArea messageArea;
 
-      
+      /*
+       *Constructor that takes in these variables and sets them to the ones in the 
+       *inner class
+       *@param JTextField _answer answer field where answer wil be typed
+       *@param JTextField _theAddresses field where the adress will be typed
+       *@param String _playerName stores the player name
+       *@param JTextField _message field where message will be typed
+       *@param JTextArea messageArea area where messages will be displayed
+      */
       public SenderGUI(JTextField _answer, JTextField _theAddresses, String _playerName, JTextField _message, JTextArea _messageArea)
       {
          answer = _answer;
@@ -209,6 +290,11 @@ public class MainGUIClient
          messageArea = _messageArea;
       }
       
+      /*
+      *Method that will be used when the player presses connect. It creates the  
+      *socket and the BufferedReader and PrintWriter, as well as changing certain
+      *elements within the GUI in order for the user to know they have connected. 
+      */
       public void connect()
       {
          try
@@ -224,12 +310,14 @@ public class MainGUIClient
             header.setText("Press READY to begin the game");
             header.setFont(new Font("Arial", Font.BOLD, 45));            
          }
+         //When UnknownException is catched, a message will be printed and the readyUp will be disabled
          catch(UnknownHostException uhe)
          {
             System.err.println("Cannot find the host");
             connect.setEnabled(true);
             readyUp.setEnabled(false);
          }
+         //When IOExceptione is catched, a message will be printed and the readyUp will be disabled.
          catch(IOException ioe)
          {
             System.out.println("Lost connection with the server");
@@ -237,6 +325,11 @@ public class MainGUIClient
             readyUp.setEnabled(false);
          }
       }
+      
+      /*
+      *Method that will be used when the player presses readyUp. It prints to the server that
+      *it is ready and changes some GUI components for the user to know they have ready'd up.
+      */
       public void readyUp(){
          try
          {
@@ -251,7 +344,10 @@ public class MainGUIClient
          } 
       
       }
-   
+      
+      /*
+      *Method that sends the answer to the server
+      */
       public void sendTheAnswer()
       {
          try
@@ -267,6 +363,9 @@ public class MainGUIClient
          } 
       } 
       
+      /*
+      *Method that sends the chat message to the server
+      */
       public void sendTheMessage()
       {
          try
@@ -281,51 +380,72 @@ public class MainGUIClient
          } 
       }      
       
+      /*
+      *Method that deals with all the actions performed depending on 
+      *the condition's statement.
+      *@param ActionEvent ae
+      */
       public void actionPerformed(ActionEvent ae)
-      {     
+      {  
+         //Calls the sendTheAnswer method if condition is met   
          if(ae.getActionCommand().equals("Submit Answer"))
          {
             sendTheAnswer();
             sendAnswer.setEnabled(false);
          }
+         //Calls the sendTheMessage method if condition is met
          else if(ae.getActionCommand().equals("Send Message"))
          {
             sendTheMessage();
             
          }
+         //Enables readyUp and calls the connect method if the condition is met
          else if(ae.getActionCommand().equals("Connect"))
          {
             readyUp.setEnabled(true);
             connect();
             
          }
+         //Disables connect and calls readyUp method and then disables it if the condition is met 
          else if(ae.getActionCommand().equals("Ready")){
             connect.setEnabled(false);
             readyUp();
             readyUp.setEnabled(false);
          }
       }
-   
+      
+      /*
+      *Inner class that deals with multithreaded clients. It is always
+      *waiting for a message and will act depending on what the server
+      *writes back. 
+      */
       class Reader extends Thread
       {      
          String msg;
          boolean gotHeader = false;
+         //Run method
          public void run()
          {  
             try
             {
+               /*Always running and stores what is recieved into 'msg',
+               *which is then used to compare and meet conditions
+               */
                while(true)
                {
                   msg = br.readLine();
+                  //Unlocks sendAnswer if message received matches the condition.
                   if(msg.equals("UNLOCK")){
                      sendAnswer.setEnabled(true);
                      System.out.println("I was told to unlock");
 
-                  }                  
+                  }  
+                  //Locks sendAnswer if message received matches the condition                
                   else if(msg.equals("LOCK")){
                      sendAnswer.setEnabled(false);
                      System.out.println("I WAS TOLD TO LOCK");
                   }
+                  //Sets all the player's text if message received matches the condition and sets gotHeader to true
                   else if(msg.contains("NameHeader, ")){
                     if(!gotHeader){
                         String input = msg.substring(11);
@@ -340,6 +460,10 @@ public class MainGUIClient
                     }
                     
                   }
+                  /*Handles multiple conditons and sets the header depending on
+                  *the questionCounter. After condition is met, the thread will sleep for
+                  *two seconds and increment the questionCounter
+                  */
                   else if(msg.contains("Question: "))
                   {
                      if(questionCounter == 1)
@@ -381,11 +505,18 @@ public class MainGUIClient
                      header.setText(msg);
                      header.setFont(new Font("Arial", Font.BOLD, 18));
                   }
+                  //Sets the message in the message area if message received meets condition
                   else if(msg.contains("Message: "))
                   {
                      String temp = msg.substring(22);
                      messageArea.append(temp + "\n");
                   }
+                  
+                  /*
+                  *Handles multiple conditions depending on the value
+                  *of the correct answer. It will check the value of the question
+                  *and see who answered it correctly and update their score.
+                  */
                   else if(msg.contains("Correct: "))
                   {
                      if(msg.contains("80"))
@@ -556,6 +687,7 @@ public class MainGUIClient
                      System.out.println(scoreThree);
                      System.out.println(scoreFour);
                   }
+                  //Resets the board's questions and advance to the next question if message received meets condition
                   else if(msg.contains("RESET")){
                      answerOne.setText("1");
                      answerTwo.setText("2");
@@ -576,6 +708,9 @@ public class MainGUIClient
                      checkPlayer = 0;
                      
                   }
+                  /*Checks to see who has the highest score and determines who the
+                  *winner is, which is then announced to every client. 
+                  */
                   if(msg.equals("END")){
                      int checkWinner = 0;
                      
@@ -626,7 +761,12 @@ public class MainGUIClient
                            }                         
                         }                        
                      }
-                  }                  
+                  }
+                  /*
+                  *Announces that the submitted answer is incorrect, and then 
+                  *increment the checkPlayer. Once the checker reaches 4, it is reset
+                  *back to 0
+                  */                  
                   else if (msg.equals("WRONG!!!")){
                      
                      JOptionPane.showMessageDialog(null, "The answer submitted was wrong.");
@@ -636,12 +776,21 @@ public class MainGUIClient
                         checkPlayer = 0;
                      }
                   }
+                  /*
+                  *Once 4 players are connected, it enables readyUp and changes
+                  *the header for the user to know they are ready to ready up
+                  */
                   else if(msg.equals("FULL"))
                   {
                      readyUp.setEnabled(true);
                      header.setText("Press READY to recieve the next question.");
                      header.setFont(new Font("Arial", Font.BOLD, 45));
                   }
+                  /*
+                  *If a client tries to connect after 4 players have connected,
+                  *they will have readyUp and connect disabled and will only be
+                  *allowed to spectate the match
+                  */
                   else if(msg.equals("SPECTATOR: "))
                   {
                      readyUp.setEnabled(false);
