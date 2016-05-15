@@ -646,6 +646,8 @@ public class MainGUIClient
                   {
                      readyUp.setEnabled(false);
                      connect.setEnabled(false);
+                     header.setText("You are a spectator, enjoy the game!");
+                     header.setFont(new Font("Arial", Font.BOLD, 45));                     
                   }
                }
             }
