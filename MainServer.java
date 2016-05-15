@@ -114,7 +114,7 @@ public class MainServer
       }
       
       public void unlockCurrentClient(){
-         System.out.println(printerNumber);
+         System.out.println("This player should be unlocked now: " + printerNumber);
          printers.get(printerNumber).println("UNLOCK");
          printers.get(printerNumber).flush();
       }
