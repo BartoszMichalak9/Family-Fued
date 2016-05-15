@@ -240,7 +240,7 @@ public class MainGUIClient
       {
          try
          {
-            pw.println("Answer: "+answer.getText());
+            pw.println("Answer: "+answer.getText().toLowerCase());
             pw.flush();
             System.out.println("Answer: "+answer.getText());
             answer.setText("");
@@ -286,6 +286,7 @@ public class MainGUIClient
          else if(ae.getActionCommand().equals("Ready")){
             connect.setEnabled(false);
             readyUp();
+            readyUp.setEnabled(false);
          }
       }
    
@@ -549,13 +550,13 @@ public class MainGUIClient
                      answerSeven.setText("7");
                      answerEight.setText("8");
                      String pOneNewText = pOne.getText();
-                     String pTwoNewText = pOne.getText();
-                     String pThreeNewText = pOne.getText();
-                     String pFourNewText = pOne.getText();
-                     pOne.setText(pOne.getText().substring(0, pOneNewText.indexOf("S") + 6)  + "\t" + scoreOne);
-                     pTwo.setText(pTwo.getText().substring(0, pTwoNewText.indexOf("S") + 6)  + "\t" + scoreTwo);
-                     pThree.setText(pThree.getText().substring(0, pThreeNewText.indexOf("S") + 6)  + "\t" + scoreThree);
-                     pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("S") + 6)  + "\t" + scoreFour);
+                     String pTwoNewText = pTwo.getText();
+                     String pThreeNewText = pThree.getText();
+                     String pFourNewText = pFour.getText();
+                     pOne.setText(pOne.getText().substring(0, pOneNewText.indexOf("Score") + 6)  + "\t" + scoreOne);
+                     pTwo.setText(pTwo.getText().substring(0, pTwoNewText.indexOf("Score") + 6)  + "\t" + scoreTwo);
+                     pThree.setText(pThree.getText().substring(0, pThreeNewText.indexOf("Score") + 6)  + "\t" + scoreThree);
+                     pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("Score") + 6)  + "\t" + scoreFour);
                      checkPlayer = 0;
                      
                   }
@@ -589,22 +590,22 @@ public class MainGUIClient
                            
                            if(scoreOne == checkWinner)
                            {
-                              header.setText("Winner is: " + pOne.getText().substring(0, pOneNewText.indexOf("S") + 6)  + "\t" + scoreOne);
+                              header.setText("Winner is: " + pOne.getText().substring(0, pOneNewText.indexOf("Score") + 6)  + "\t" + scoreOne);
                               header.setFont(new Font("Arial", Font.BOLD, 18));
                            }
                            else if(scoreTwo == checkWinner)
                            {
-                              header.setText("Winner is: " + pTwo.getText().substring(0, pTwoNewText.indexOf("S") + 6)  + "\t" + scoreTwo);
+                              header.setText("Winner is: " + pTwo.getText().substring(0, pTwoNewText.indexOf("Score") + 6)  + "\t" + scoreTwo);
                               header.setFont(new Font("Arial", Font.BOLD, 18));
                            }
                            else if(scoreThree == checkWinner)
                            {
-                              header.setText("Winner is: " + pThree.getText().substring(0, pThreeNewText.indexOf("S") + 6)  + "\t" + scoreThree);
+                              header.setText("Winner is: " + pThree.getText().substring(0, pThreeNewText.indexOf("Score") + 6)  + "\t" + scoreThree);
                               header.setFont(new Font("Arial", Font.BOLD, 18));
                            }
                            else if(scoreFour == checkWinner)
                            {
-                              header.setText("Winner is: " + pFour.getText().substring(0, pFourNewText.indexOf("S") + 6)  + "\t" + scoreFour);
+                              header.setText("Winner is: " + pFour.getText().substring(0, pFourNewText.indexOf("Score") + 6)  + "\t" + scoreFour);
                               header.setFont(new Font("Arial", Font.BOLD, 18));
                            }                         
                         }                        
@@ -619,9 +620,9 @@ public class MainGUIClient
                         checkPlayer = 0;
                      }
                   }
-                  else
+                  else if(msg.equals("FULL"))
                   {
-                     //checkPlayer++;
+                     readyUp.setEnabled(true);
                   }
                }
             }

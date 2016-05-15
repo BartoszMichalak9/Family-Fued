@@ -18,6 +18,7 @@ public class MainServer
    private int playerCount = -1;
    private int index = 0;
    private int countQuestionsSent = 0;
+   private int boardCount = 0;
    
    public MainServer(){
       ServerSocket ss;
@@ -221,6 +222,7 @@ public class MainServer
                         System.out.println("Correct: " + list+"\n");
                         broadcast("Correct: " + list);
                         unlockCurrentClient();
+                        boardCount++;
                         System.out.println("unlock client");
                         wrongs = false;
                         break;
@@ -238,6 +240,11 @@ public class MainServer
                      unlockNextClient();
                      wrongs = false;
                   
+                  }
+                  if(boardCount == 8)
+                  {
+                     broadcast("FULL");
+                     boardCount = 0;
                   }
                }              
                broadcast(outputMessage);
