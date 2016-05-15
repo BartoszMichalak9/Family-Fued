@@ -68,6 +68,7 @@ public class MainGUIClient
    private int scoreFour = 0;
    private int checkPlayer = 0;
    private int questionCounter = 0;
+   private int fullBoardCounter = 0;
      
    private static String aPlayer;
    
@@ -782,9 +783,18 @@ public class MainGUIClient
                   */
                   else if(msg.equals("FULL"))
                   {
+                     fullBoardCounter++;
                      readyUp.setEnabled(true);
-                     header.setText("Press READY to recieve the next question.");
-                     header.setFont(new Font("Arial", Font.BOLD, 45));
+                     if(fullBoardCounter < 5)
+                     {
+                        header.setText("Press READY to recieve the next question.");
+                        header.setFont(new Font("Arial", Font.BOLD, 45));
+                     }
+                     else
+                     {
+                        header.setText("Press READY to see the winner.");
+                        header.setFont(new Font("Arial", Font.BOLD, 45));
+                     }
                   }
                   /*
                   *If a client tries to connect after 4 players have connected,
