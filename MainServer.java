@@ -58,22 +58,14 @@ public class MainServer
       
       public String makeQuestion(){
          
-         boolean check = false;
          index = generate.nextInt(25);
-         String output = "";
-        
-         while(!check){
-            if(!numsCalled.contains(index)){
-               numsCalled.add(index);
-               check = true;
-               output = questionsList.get(index);
-               return output;
-            }
-            else{
-               index = generate.nextInt(25);             
-            }
+         System.out.println("A number was randomly generated...");
+         while(numsCalled.contains(index)){
+            index = generate.nextInt(25); 
+            System.out.println("A duplicate was found. A new number was generated");           
+            
          }
-         return "error";
+         return questionsList.get(index);
       }
       
       public String makeAnswer(){
@@ -210,34 +202,39 @@ public class MainServer
                   System.out.println("THREAD SUBMISSION NUMBER: "+printerNumber);
                   lockClients();
                   String temp = answersList.get(index);
-                  String[] x = temp.split(",");
+                  String[] input = temp.split(",");
                      
-                  for(String list : x){
+                  for(String list : input){
                      
-                     System.out.println("Database Answers: "+list);
+                     System.out.println("Answers in the database: "+list);
                      System.out.println(outputMessage);
                         
                      if(list.contains(outputMessage.substring(8))){
                         
                         System.out.println("Correct: " + list+"\n");
                         broadcast("Correct: " + list);
+                        System.out.println("CORRECT has been broadcasted across the network");
                         unlockCurrentClient();
+                        System.out.println("The current client should have been unlocked again");
                         boardCount++;
+                        System.out.println("The board count has been increased to: "+boardCount);
                         System.out.println("unlock client");
                         wrongs = false;
                         break;
                            //use the current thread's name and unlock it again
                      }
                      else if(!list.contains(outputMessage.substring(8))){
-                        System.out.println("Its wrong");
+                        System.out.println("This answer was wrong");
                         wrongs = true;
+                        System.out.println("Wrong has been set to false");
                      }
                      
                   }
                   if(wrongs){
                      broadcast("WRONG!!!");
-                        System.out.println("print wrong");
+                     System.out.println("WRONG is broadcasted acrossed the network");
                      unlockNextClient();
+                     System.out.println("The next client should have been unlocked");
                      wrongs = false;
                   
                   }

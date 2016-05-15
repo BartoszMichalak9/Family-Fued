@@ -110,10 +110,10 @@ public class MainGUIClient
       frame.add(northPanel, BorderLayout.NORTH); 
       
       chatPanel = new JPanel(new BorderLayout());
-      
+     
       eastPanel = new JPanel(new GridLayout(2,2));
-      messageArea = new JTextArea(16, 30);
-      eastPanel.add(messageArea);
+      messageArea = new JTextArea(11, 20);
+      eastPanel.add(new JScrollPane(messageArea));
       chatPanel.add(eastPanel, BorderLayout.CENTER);
       
       playerPanel = new JPanel(new GridLayout(4,1, 20, 20));
@@ -221,16 +221,20 @@ public class MainGUIClient
             pw.println(playerName);
             pw.flush();
             connect.setEnabled(false);
-            header.setText("Press ready to begin the game");
+            header.setText("Press READY to begin the game");
             header.setFont(new Font("Arial", Font.BOLD, 45));            
          }
          catch(UnknownHostException uhe)
          {
             System.err.println("Cannot find the host");
+            connect.setEnabled(true);
+            readyUp.setEnabled(false);
          }
          catch(IOException ioe)
          {
             System.out.println("Lost connection with the server");
+            connect.setEnabled(true);
+            readyUp.setEnabled(false);
          }
       }
       public void readyUp(){
@@ -635,6 +639,8 @@ public class MainGUIClient
                   else if(msg.equals("FULL"))
                   {
                      readyUp.setEnabled(true);
+                     header.setText("Press READY to recieve the next question.");
+                     header.setFont(new Font("Arial", Font.BOLD, 45));
                   }
                }
             }
