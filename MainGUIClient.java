@@ -332,10 +332,10 @@ public class MainGUIClient
                     
                         String[] output = input.split(",");
                    
-                        pOne.setText(pOne.getText()+"\t"+output[1] + "\tScore:\t");
-                        pTwo.setText(pTwo.getText()+"\t"+output[2]  + "\tScore:\t");
-                        pThree.setText(pThree.getText()+"\t"+output[3]  + "\tScore:\t");
-                        pFour.setText(pFour.getText()+"\t"+output[4]  + "\tScore:\t");
+                        pOne.setText(pOne.getText()+"\t"+output[1] + "  \tScore:\t  ");
+                        pTwo.setText(pTwo.getText()+"\t"+output[2]  + "\tScore:\t  ");
+                        pThree.setText(pThree.getText()+"\t"+output[3]  + "\tScore:\t  ");
+                        pFour.setText(pFour.getText()+"\t"+output[4]  + "\tScore:\t  ");
                         gotHeader = true;
                     }
                     
