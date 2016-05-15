@@ -231,8 +231,15 @@ public class MainGUIClient
          }
       }
       public void readyUp(){
-         pw.println("READY!!!");
-         pw.flush(); 
+         try
+         {
+            pw.println("READY!!!");
+            pw.flush();
+         }
+         catch(NullPointerException npe)
+         {
+            System.err.println("You are not connected to the server or the server is off.");
+         } 
       
       }
    
