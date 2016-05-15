@@ -161,8 +161,8 @@ public class MainServer
                   }                        
                   else if(playerCount>=4){
                      playerCount++;
-                     printers.get(printerNumber).println("SPECTATOR: ");
-                     printers.get(printerNumber).flush();
+                     printers.get(playerCount).println("SPECTATOR: ");
+                     printers.get(playerCount).flush();
 
                   }
                      
