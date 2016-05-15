@@ -600,9 +600,9 @@ public class MainGUIClient
                         if(i == 4)
                         {
                            String pOneNewText = pOne.getText();
-                           String pTwoNewText = pOne.getText();
-                           String pThreeNewText = pOne.getText();
-                           String pFourNewText = pOne.getText();                           
+                           String pTwoNewText = pTwo.getText();
+                           String pThreeNewText = pThree.getText();
+                           String pFourNewText = pFour.getText();                           
                            
                            if(scoreOne == checkWinner)
                            {
