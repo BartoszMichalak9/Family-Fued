@@ -220,7 +220,9 @@ public class MainGUIClient
             new Reader().start();
             pw.println(playerName);
             pw.flush();
-            connect.setEnabled(false);                 
+            connect.setEnabled(false);
+            header.setText("Press ready to begin the game");
+            header.setFont(new Font("Arial", Font.BOLD, 45));            
          }
          catch(UnknownHostException uhe)
          {
@@ -236,6 +238,8 @@ public class MainGUIClient
          {
             pw.println("READY!!!");
             pw.flush();
+            header.setText("Waiting for other players...");
+            header.setFont(new Font("Arial", Font.BOLD, 45));            
          }
          catch(NullPointerException npe)
          {
