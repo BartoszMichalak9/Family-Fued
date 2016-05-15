@@ -59,10 +59,8 @@ public class MainServer
       public String makeQuestion(){
          
          index = generate.nextInt(25);
-         System.out.println("A number was randomly generated...");
          while(numsCalled.contains(index)){
             index = generate.nextInt(25); 
-            System.out.println("A duplicate was found. A new number was generated");           
             
          }
          return questionsList.get(index);
@@ -114,7 +112,6 @@ public class MainServer
       }
       
       public void unlockCurrentClient(){
-         System.out.println("This player should be unlocked now: " + printerNumber);
          printers.get(printerNumber).println("UNLOCK");
          printers.get(printerNumber).flush();
       }
@@ -157,14 +154,12 @@ public class MainServer
                      for(String list: playerName){
                         teamMemberNames +=(list+", ");
                      }
-                           //this is for the list of players that are connected
+                     //this is for the list of players that are connected
                      broadcast("NameHeader: "+teamMemberNames);
                      unlockNextClient();
                      playerCount++;
-                     System.out.println("NAMES HAVEN BEEN SENT TO THE CLIENTS!!!");    
                   }                        
                   else if(playerCount>=4){
-                        //this should get a tag
                      broadcast("SPECTATOR: ");
                      playerCount++;
                   }
@@ -175,7 +170,6 @@ public class MainServer
                else if(outputMessage.contains("READY!!!")){
                   if(questionCount < 4){
                      questionCount++;
-                     System.out.println("current question count: "+questionCount);
                   }
                   else if(questionCount == 4){
                      countQuestionsSent++;
@@ -199,42 +193,31 @@ public class MainServer
                else if(outputMessage.contains("Answer: ")){
                   boolean wrongs = false;
                   printerNumber = Integer.parseInt(getThreadName());
-                  System.out.println("THREAD SUBMISSION NUMBER: "+printerNumber);
                   lockClients();
                   String temp = answersList.get(index);
                   String[] input = temp.split(",");
                      
                   for(String list : input){
                      
-                     System.out.println("Answers in the database: "+list);
-                     System.out.println(outputMessage);
+                     System.out.println("Answer Submitted: "+outputMessage);
                         
                      if(list.contains(outputMessage.substring(8))){
                         
                         System.out.println("Correct: " + list+"\n");
                         broadcast("Correct: " + list);
-                        System.out.println("CORRECT has been broadcasted across the network");
                         unlockCurrentClient();
-                        System.out.println("The current client should have been unlocked again");
                         boardCount++;
-                        System.out.println("The board count has been increased to: "+boardCount);
-                        System.out.println("unlock client");
                         wrongs = false;
-                        break;
-                           //use the current thread's name and unlock it again
+                        break;                           
                      }
                      else if(!list.contains(outputMessage.substring(8))){
-                        System.out.println("This answer was wrong");
                         wrongs = true;
-                        System.out.println("Wrong has been set to false");
                      }
                      
                   }
                   if(wrongs){
                      broadcast("WRONG!!!");
-                     System.out.println("WRONG is broadcasted acrossed the network");
                      unlockNextClient();
-                     System.out.println("The next client should have been unlocked");
                      wrongs = false;
                   
                   }
@@ -322,11 +305,3 @@ public class MainServer
    }
 
 }
-
-/*
- //this is making new question
-                        outputMessage = "Question: "+ makeQuestion();
-             
-                        //broadcasts the question               
-                        broadcast(outputMessage);
-                        unlockNextClient();  need this later*/
