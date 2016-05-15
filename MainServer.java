@@ -156,20 +156,17 @@ public class MainServer
             printerNumber++;
             printers.get(printerNumber).println("UNLOCK");
             printers.get(printerNumber).flush();
-            System.out.println("1: " +printerNumber);
          }
          else if(printerNumber>= 0 && printerNumber<3){
             printerNumber++;
             printers.get(printerNumber).println("UNLOCK");
             printers.get(printerNumber).flush();
-            System.out.println("2: " +printerNumber);
          }        
          else{
             printerNumber = 0;
             printers.get(printerNumber).println("UNLOCK");
             printers.get(printerNumber).flush();
             //set the unlock to printer zero
-            System.out.println("3: " +printerNumber);
          }
       
       }
@@ -321,6 +318,7 @@ public class MainServer
                   //sends wrong to client and sets wrongs to false and allows the next client to go
                   if(wrongs){
                      broadcast("WRONG!!!");
+                     System.out.println("The answer submitted is wrong");
                      unlockNextClient();
                      wrongs = false;
                   
