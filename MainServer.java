@@ -160,9 +160,9 @@ public class MainServer
                      playerCount++;
                   }                        
                   else if(playerCount>=4){
-                     playerCount++;
                      printers.get(playerCount).println("SPECTATOR: ");
                      printers.get(playerCount).flush();
+                     playerCount++;
 
                   }
                      
