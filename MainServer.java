@@ -17,6 +17,7 @@ public class MainServer
    private String[] playerName = new String[4];
    private int playerCount = -1;
    private int index = 0;
+   private int countQuestionsSent = 0;
    
    public MainServer(){
       ServerSocket ss;
@@ -184,11 +185,20 @@ public class MainServer
                      System.out.println("current question count: "+questionCount);
                   }
                   else if(questionCount == 4){
-                     questionCount = 1;
-                     broadcast("RESET");
-                     outputMessage = "Question: "+ makeQuestion();
-                     broadcast(outputMessage);
-                     firstClientUnlock(); 
+                     countQuestionsSent++;
+                     if(countQuestionsSent == 6)
+                     {
+                        broadcast("END");
+                     }
+                     else
+                     {                                          
+                        questionCount = 1;
+                        broadcast("RESET");
+                        outputMessage = "Question: "+ makeQuestion();
+                        lockClients();
+                        broadcast(outputMessage);
+                        firstClientUnlock();
+                     } 
                   }  
                                 
                }
@@ -207,18 +217,24 @@ public class MainServer
                      System.out.println(outputMessage);
                         
                      if(list.contains(outputMessage.substring(8))){
+                        
                         System.out.println("Correct: " + list+"\n");
                         broadcast("Correct: " + list);
                         unlockCurrentClient();
+                        System.out.println("unlock client");
+                        wrongs = false;
                         break;
                            //use the current thread's name and unlock it again
                      }
-                     else{
+                     else if(!list.contains(outputMessage.substring(8))){
+                        System.out.println("Its wrong");
                         wrongs = true;
                      }
                      
                   }
                   if(wrongs){
+                     broadcast("WRONG!!!");
+                        System.out.println("print wrong");
                      unlockNextClient();
                      wrongs = false;
                   

@@ -15,6 +15,7 @@ public class MainGUIClient
    private int scoreThree = 0;
    private int scoreFour = 0;
    private int checkPlayer = 0;
+   private int questionCounter = 0;
      
    private static String aPlayer;
    
@@ -314,16 +315,52 @@ public class MainGUIClient
                     
                         String[] output = input.split(",");
                    
-                        pOne.setText(pOne.getText()+"\t"+output[1] + "\tScore: ");
-                        pTwo.setText(pTwo.getText()+"\t"+output[2]  + "\tScore: ");
-                        pThree.setText(pThree.getText()+"\t"+output[3]  + "\tScore: ");
-                        pFour.setText(pFour.getText()+"\t"+output[4]  + "\tScore: ");
+                        pOne.setText(pOne.getText()+"\t"+output[1] + "\tScore:\t");
+                        pTwo.setText(pTwo.getText()+"\t"+output[2]  + "\tScore:\t");
+                        pThree.setText(pThree.getText()+"\t"+output[3]  + "\tScore:\t");
+                        pFour.setText(pFour.getText()+"\t"+output[4]  + "\tScore:\t");
                         gotHeader = true;
                     }
                     
                   }
                   else if(msg.contains("Question: "))
                   {
+                     if(questionCounter == 1)
+                     {
+                        header.setText("ROUND 1");
+                        header.setFont(new Font("Arial", Font.BOLD, 75));
+                     }
+                     else if(questionCounter == 3)
+                     {
+                        header.setText("ROUND 2");
+                        header.setFont(new Font("Arial", Font.BOLD, 75));
+                     }
+                     else if(questionCounter == 4)
+                     {
+                        header.setText("ROUND 3");
+                        header.setFont(new Font("Arial", Font.BOLD, 75));
+                     }
+                     else if(questionCounter == 6)
+                     {
+                        header.setText("ROUND 4");
+                        header.setFont(new Font("Arial", Font.BOLD, 75));
+                     } 
+                     else if(questionCounter == 8)
+                     {
+                        header.setText("FINAL ROUND");
+                        header.setFont(new Font("Arial", Font.BOLD, 75));
+                     }                                                                                   
+                     
+                     try
+                     {
+                        Thread.sleep(2000);
+                     }
+                     catch(InterruptedException ie)
+                     {
+                     }
+                     
+                     questionCounter++;
+                     
                      header.setText(msg);
                      header.setFont(new Font("Arial", Font.BOLD, 18));
                   }
@@ -337,8 +374,11 @@ public class MainGUIClient
                      if(msg.contains("80"))
                      {
                         answerOne.setText(msg);
+                        System.out.println("right for 80");
+                        System.out.println(checkPlayer);
                         if(checkPlayer == 0)
                         {
+                        System.out.println("add 80");
                            scoreOne += 80;
                         }
                         else if(checkPlayer == 1)
@@ -494,7 +534,10 @@ public class MainGUIClient
                            scoreFour += 10;
                         }                        
                      }
-                     //sendAnswer.setEnabled(true);
+                     System.out.println(scoreOne);
+                     System.out.println(scoreTwo);
+                     System.out.println(scoreThree);
+                     System.out.println(scoreFour);
                   }
                   else if(msg.contains("RESET")){
                      answerOne.setText("1");
@@ -509,20 +552,76 @@ public class MainGUIClient
                      String pTwoNewText = pOne.getText();
                      String pThreeNewText = pOne.getText();
                      String pFourNewText = pOne.getText();
-                     pOne.setText(pOne.getText().substring(0, pOneNewText.indexOf("S") + 6)  + " " + scoreOne);
-                     pTwo.setText(pTwo.getText().substring(0, pTwoNewText.indexOf("S") + 6)  + " " + scoreTwo);
-                     pThree.setText(pThree.getText().substring(0, pThreeNewText.indexOf("S") + 6)  + " " + scoreThree);
-                     pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("S") + 6)  + " " + scoreFour);
+                     pOne.setText(pOne.getText().substring(0, pOneNewText.indexOf("S") + 6)  + "\t" + scoreOne);
+                     pTwo.setText(pTwo.getText().substring(0, pTwoNewText.indexOf("S") + 6)  + "\t" + scoreTwo);
+                     pThree.setText(pThree.getText().substring(0, pThreeNewText.indexOf("S") + 6)  + "\t" + scoreThree);
+                     pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("S") + 6)  + "\t" + scoreFour);
                      checkPlayer = 0;
                      
                   }
-                  else if (msg.contains("WRONG!!!")){
+                  if(msg.equals("END")){
+                     int checkWinner = 0;
                      
-                     JOptionPane.showMessageDialog(null, msg.substring(8)+" "+aPlayer+" submitted was wrong.");
+                     for(int i = 0; i < 5; i++)
+                     {
+                        if(i == 0 && scoreOne >= checkWinner)
+                        {
+                           checkWinner = scoreOne;  
+                        }
+                        if(i == 1 && scoreTwo > checkWinner)
+                        {
+                           checkWinner = scoreTwo;  
+                        }                        
+                        if(i == 2 && scoreThree > checkWinner)
+                        {
+                           checkWinner = scoreThree;  
+                        }                        
+                        if(i == 3 && scoreFour > checkWinner)
+                        {
+                           checkWinner = scoreFour;  
+                        }
+                        if(i == 4)
+                        {
+                           String pOneNewText = pOne.getText();
+                           String pTwoNewText = pOne.getText();
+                           String pThreeNewText = pOne.getText();
+                           String pFourNewText = pOne.getText();                           
+                           
+                           if(scoreOne == checkWinner)
+                           {
+                              header.setText("Winner is: " + pOne.getText().substring(0, pOneNewText.indexOf("S") + 6)  + "\t" + scoreOne);
+                              header.setFont(new Font("Arial", Font.BOLD, 18));
+                           }
+                           else if(scoreTwo == checkWinner)
+                           {
+                              header.setText("Winner is: " + pTwo.getText().substring(0, pTwoNewText.indexOf("S") + 6)  + "\t" + scoreTwo);
+                              header.setFont(new Font("Arial", Font.BOLD, 18));
+                           }
+                           else if(scoreThree == checkWinner)
+                           {
+                              header.setText("Winner is: " + pThree.getText().substring(0, pThreeNewText.indexOf("S") + 6)  + "\t" + scoreThree);
+                              header.setFont(new Font("Arial", Font.BOLD, 18));
+                           }
+                           else if(scoreFour == checkWinner)
+                           {
+                              header.setText("Winner is: " + pFour.getText().substring(0, pFourNewText.indexOf("S") + 6)  + "\t" + scoreFour);
+                              header.setFont(new Font("Arial", Font.BOLD, 18));
+                           }                         
+                        }                        
+                     }
+                  }                  
+                  else if (msg.equals("WRONG!!!")){
+                     
+                     JOptionPane.showMessageDialog(null, "The answer submitted was wrong.");
+                     checkPlayer++;
+                     if(checkPlayer == 4)
+                     {
+                        checkPlayer = 0;
+                     }
                   }
                   else
                   {
-                     checkPlayer++;
+                     //checkPlayer++;
                   }
                }
             }
@@ -537,13 +636,3 @@ public class MainGUIClient
       }
    }
 }
-
-
-
-
-
-
-
-
-
-
