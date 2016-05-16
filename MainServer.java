@@ -28,6 +28,8 @@ public class MainServer
    *@param int index stores the index
    *@param int countQuestionSent stores the amount of questions sent
    *@param int boardCount stores the count of the board
+   *@param JFrame frame creates a frame for the server that will contain a text area that will print out information from the clients
+   *@param JTextArea serverInfo Print out messages to the server with information about the game being played
    */ 
    private ArrayList<String> questionsList = new ArrayList<String>();
    private ArrayList<String> answersList = new ArrayList<String>();
@@ -40,12 +42,31 @@ public class MainServer
    private int index = 0;
    private int countQuestionsSent = 0;
    private int boardCount = 0;
+   private JFrame frame;
+   private JTextArea serverInfo;
+   
    
    /*
    *Main constructor for MainServer. Instantiates the necessary components
    *to start the server such as the ServerSocket and Socket.
    */
    public MainServer(){
+   
+      //Sets information for the frame
+      frame = new JFrame("Family Feud - Server");
+      frame.setLocationRelativeTo(null);
+      frame.setSize(500,500);
+      frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      
+      //Creates a textarea and adds a scroll pane to it
+      serverInfo = new JTextArea();
+      frame.add(new JScrollPane(serverInfo));
+      
+      //sets the frame to visible
+      frame.setVisible(true);
+   
+   
+   
       ServerSocket ss;
       try
       {
@@ -136,7 +157,7 @@ public class MainServer
             //Decrements playerCount and breaks out of statement if msg equals DISCONNECT
             //Prints to the client if it isn't.
             if(msg.contains("DISCONNECT: ")){
-               System.out.println(msg.substring(12));
+               serverInfo.append(msg.substring(12) + "\n");
                playerCount--;
                break;
             }
@@ -222,10 +243,10 @@ public class MainServer
                if(outputMessage.contains("Player Name:") && !outputMessage.contains("Message:") && !outputMessage.contains("READY!!!")){
                   if(playerCount<3){
                      playerCount++;                  
-                     System.out.println("Player Number: "+(playerCount+1));
+                     serverInfo.append("Player Number: "+(playerCount+1) + "\n");
                      playerName[playerCount] = outputMessage.substring(12);
-                     System.out.println("Name entered: "+playerName[playerCount]);
-                     System.out.println("Player: "+playerName[playerCount]+ " connected.\n\n");   
+                     serverInfo.append("Name entered: "+playerName[playerCount]+"\n");
+                     serverInfo.append("Player: "+playerName[playerCount]+ " connected.\n\n\n");   
                      
                   } 
                   
@@ -299,11 +320,11 @@ public class MainServer
                   //Cycles through input and broadcasts the correct answer.   
                   for(String list : input){
                      
-                     System.out.println("Answer Submitted: "+outputMessage);
+                     serverInfo.append("Answer Submitted: "+outputMessage+"\n");
                         
                      if(list.contains(outputMessage.substring(8))){
                         
-                        System.out.println("Correct: " + list+"\n");
+                        serverInfo.append("Correct: " + list+"\n\n");
                         broadcast("Correct: " + list);
                         unlockCurrentClient();
                         boardCount++;
@@ -318,7 +339,7 @@ public class MainServer
                   //sends wrong to client and sets wrongs to false and allows the next client to go
                   if(wrongs){
                      broadcast("WRONG!!!");
-                     System.out.println("The answer submitted is wrong");
+                     serverInfo.append("The answer submitted is wrong\n");
                      unlockNextClient();
                      wrongs = false;
                   
