@@ -124,6 +124,7 @@ public class MainGUIClient
       frame.setSize(1000, 800);
       frame.setTitle("Family Feud");
       frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      frame.setResizable(false);
       //Overides the default window closing
       WindowListener exitListener = new WindowAdapter() {  
          public void windowClosing(WindowEvent e) {         
@@ -171,6 +172,7 @@ public class MainGUIClient
      
       eastPanel = new JPanel(new GridLayout(2,2));
       messageArea = new JTextArea(11, 20);
+      messageArea.setEditable(false);
       eastPanel.add(new JScrollPane(messageArea));
       chatPanel.add(eastPanel, BorderLayout.CENTER);
       
@@ -439,7 +441,7 @@ public class MainGUIClient
                   if(msg.equals("UNLOCK")){
                      sendAnswer.setEnabled(true);
                      System.out.println("I was told to unlock");
-
+                     
                   }  
                   //Locks sendAnswer if message received matches the condition                
                   else if(msg.equals("LOCK")){
@@ -458,6 +460,7 @@ public class MainGUIClient
                         pThree.setText(pThree.getText()+"  \t"+output[3]+" "  +  " \tScore:\t  ");
                         pFour.setText(pFour.getText()+"  \t"+output[4]+" "  + "  \tScore:\t  ");
                         gotHeader = true;
+                        pOne.setForeground(Color.RED);
                     }
                     
                   }
@@ -713,6 +716,16 @@ public class MainGUIClient
                   *winner is, which is then announced to every client. 
                   */
                   if(msg.equals("END")){
+                  
+                     String pOneNewText = pOne.getText();
+                     String pTwoNewText = pTwo.getText();
+                     String pThreeNewText = pThree.getText();
+                     String pFourNewText = pFour.getText();
+                     pOne.setText(pOne.getText().substring(0, pOneNewText.indexOf("Score") + 6)  + "\t" + scoreOne);
+                     pTwo.setText(pTwo.getText().substring(0, pTwoNewText.indexOf("Score") + 6)  + "\t" + scoreTwo);
+                     pThree.setText(pThree.getText().substring(0, pThreeNewText.indexOf("Score") + 6)  + "\t" + scoreThree);
+                     pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("Score") + 6)  + "\t" + scoreFour);                  
+
                      int checkWinner = 0;
                      
                      for(int i = 0; i < 5; i++)
@@ -735,10 +748,10 @@ public class MainGUIClient
                         }
                         if(i == 4)
                         {
-                           String pOneNewText = pOne.getText();
-                           String pTwoNewText = pTwo.getText();
-                           String pThreeNewText = pThree.getText();
-                           String pFourNewText = pFour.getText();                           
+                            pOneNewText = pOne.getText();
+                            pTwoNewText = pTwo.getText();
+                            pThreeNewText = pThree.getText();
+                            pFourNewText = pFour.getText();                           
                            
                            if(scoreOne == checkWinner)
                            {
@@ -772,10 +785,34 @@ public class MainGUIClient
                      
                      JOptionPane.showMessageDialog(null, "The answer submitted was wrong.");
                      checkPlayer++;
+                     
+                     pOne.setForeground(Color.BLACK);
+                     pTwo.setForeground(Color.BLACK);
+                     pThree.setForeground(Color.BLACK);
+                     pFour.setForeground(Color.BLACK);
+                     
                      if(checkPlayer == 4)
                      {
                         checkPlayer = 0;
                      }
+                     
+                     if(checkPlayer == 0)
+                     {
+                        pOne.setForeground(Color.RED);
+                     }
+                     else if(checkPlayer == 1)
+                     {
+                        pTwo.setForeground(Color.RED);
+                     }
+                     else if(checkPlayer == 2)
+                     {
+                        pThree.setForeground(Color.RED);
+                     }
+                     else if(checkPlayer == 3)
+                     {
+                        pFour.setForeground(Color.RED);
+                     }
+                     
                   }
                   /*
                   *Once 4 players are connected, it enables readyUp and changes

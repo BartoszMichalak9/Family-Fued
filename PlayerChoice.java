@@ -57,6 +57,7 @@ public class PlayerChoice extends JFrame implements ActionListener
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       //Sets the size of the frame
       frame.setSize(600, 200);
+      frame.setResizable(false);
       
       //Creates a new JPanel object called panel that is set to GridLayout
       panel = new JPanel(new GridLayout(2, 1));

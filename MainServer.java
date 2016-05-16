@@ -55,11 +55,12 @@ public class MainServer
       //Sets information for the frame
       frame = new JFrame("Family Feud - Server");
       frame.setLocationRelativeTo(null);
-      frame.setSize(500,500);
+      frame.setSize(700,700);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      
+      frame.setResizable(false);
       //Creates a textarea and adds a scroll pane to it
       serverInfo = new JTextArea();
+      serverInfo.setEditable(false);
       frame.add(new JScrollPane(serverInfo));
       
       //sets the frame to visible
@@ -137,6 +138,8 @@ public class MainServer
             index = generate.nextInt(25); 
             
          }
+         numsCalled.add(index);
+         
          return questionsList.get(index);
       }
       
