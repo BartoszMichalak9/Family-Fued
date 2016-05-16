@@ -711,6 +711,10 @@ public class MainGUIClient
                      pFour.setText(pFour.getText().substring(0, pFourNewText.indexOf("Score") + 6)  + "\t" + scoreFour);
                      checkPlayer = 0;
                      
+                     pOne.setForeground(Color.RED);
+                     pTwo.setForeground(Color.BLACK);
+                     pThree.setForeground(Color.BLACK);
+                     pFour.setForeground(Color.BLACK);                     
                   }
                   /*Checks to see who has the highest score and determines who the
                   *winner is, which is then announced to every client. 
