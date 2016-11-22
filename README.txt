@@ -1,9 +1,7 @@
-							Family-Fued
-Created By:
-	
-	Tanner Glantz, Brett Phillips, Rose Hacker, and Alejandro Garzon
+#Family-Fued
+Created By: Tanner Glantz, Brett Phillips, Rose Hacker, and Alejandro Garzon
 
-Overview:
+#Overview:
 
 Upon start up of the program, the user must click "Start" to launch the program. 
 After the program has launched, the user must type in the IP address of the server and click "Ready".
@@ -13,7 +11,7 @@ clicked "Ready" again another round will spawn. After each round, the scores for
 right hand corner. There are five rounds with one question per round.
 
 
-Questions and Answers:
+#Notes:
 
 Each round stats with the first person to connect as the first person to answer the question for that round.
 When a user answers a question correctly, their answer button is unlocked so that they can answer another question.
